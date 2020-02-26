@@ -1,0 +1,45 @@
+version: '2'
+services:
+  mariadb:
+    image: mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - .${pwd}/mariadb:/docker-entrypoint-initdb.d
+    environment:
+     - MYSQL_ROOT_PASSWORD=password
+     - MYSQL_USER=root
+     - MYSQL_DATABASE=gamify
+    
+  redis:
+    image: redis
+    expose:
+      - 6379
+  gamify:
+    build: gamify
+    command: npm run dev
+    restart: always
+    volumes:
+      - .:/usr/app/gamify
+      - /usr/app/gamify/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mariadb
+      - redis
+  waves-backend:
+    build: waves-backend
+    command: npm run dev
+    volumes:
+      - .:/usr/app/waves-backend
+      - /usr/app/waves-backend/node_modules
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mariadb
+      - redis
+  
+
+  
+  
