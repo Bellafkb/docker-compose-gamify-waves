@@ -1,4 +1,4 @@
-const { connectMysql } = require("./config/connectMysql");
+require("./config/connectMysql");
 require("./config/connectRedis");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -23,7 +23,6 @@ if (process.env.NODE_ENV == "dev") {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-connectMysql();
 app.use(cors());
 
 app.use("/", route);
@@ -42,10 +41,10 @@ app.use((error, req, res, callback) => {
     .json({ success: false, message: error.message });
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
   console.log(
-    `App running in ${process.env.NODE_ENV} mode on port ${port}`.green.bold
+    `App running in ${port} mode on port ${port}`.green.bold
   );
 });

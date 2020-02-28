@@ -1,20 +1,21 @@
 const mariadb = require("mariadb");
 
-const connectMysql = async () => {
-  try {
-    const pool = mariadb.createPool({
-      host: "172.20.0.1",
-      user: "root",
-      database: "gamify",
-      port: "3306",
-      password:"password"
-    });
-    let conn = await pool.getConnection();
-    global.conn = conn;
-    console.log("mariadb db connected")
-  } catch (error) {
-    throw error;
-  }
-};
-
-module.exports = { connectMysql };
+(() => {
+  setTimeout(async () => {
+    console.log("connecting to db...");
+    try {
+      const pool = await mariadb.createPool({
+        host: "172.17.0.1",
+        user: "root",
+        database: "gamifydb",
+        port: "3306",
+        password: "password"
+      });
+      const conn = await pool.getConnection();
+      global.conn = conn;
+      console.log("mariadb db connected");
+    } catch (error) {
+      throw error;
+    }
+  }, 20000);
+})();
