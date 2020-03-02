@@ -11,16 +11,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@rodrigogs/mysql-events": "^0.6.0",
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.4.0",
     "mariadb": "^2.2.0",
     "morgan": "^1.9.1",
     "mysql": "^2.18.1",
-    "redis": "^3.0.2"
+    "mysql-events": "0.0.11",
+    "ora": "^4.0.3",
+    "redis": "^3.0.2",
+    "uuid": "^7.0.1"
   },
   "devDependencies": {
     "jest": "^25.1.0"

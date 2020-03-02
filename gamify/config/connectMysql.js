@@ -5,7 +5,7 @@ const mariadb = require("mariadb");
     console.log("connecting to db...");
     try {
       const pool = await mariadb.createPool({
-        host: "172.17.0.1",
+        host: "localhost", //172.17.0.1
         user: "root",
         database: "gamifydb",
         port: "3306",
@@ -17,5 +17,5 @@ const mariadb = require("mariadb");
     } catch (error) {
       throw error;
     }
-  }, 20000);
+  }, 1000);
 })();

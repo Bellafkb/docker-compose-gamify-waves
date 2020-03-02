@@ -1,22 +1,24 @@
-const router = require("express").Router()
+const router = require("express").Router();
+const { check } = require("express-validator");
 
-router.get("/:userId/progress", (req,res)=>{
-    res.status(200).json({
-        success: true,
-        cewRanking:[]
-    })
-})
+const {
+  postAchievement,
+  getAchievements
+} = require("../controller/achievementController");
 
-router.get("/", (req,res)=>{
-    res.status(200).json({
-        success: true,
-        cewRanking:[]
-    })
-})
+router
+  .route("/")
+  .get(getAchievements)
+  .post(
+    [
+      check("name")
+        .notEmpty()
+        .isString(),
+      check("desc")
+        .notEmpty()
+        .isString()
+    ],
+    postAchievement
+  );
 
-router.get("/create", (req,res)=>{
-    res.status(200).json({
-        success: true,
-        cewRanking:[]
-    })
-})
+module.exports = router;

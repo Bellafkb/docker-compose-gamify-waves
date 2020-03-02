@@ -7,7 +7,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - .${pwd}/mariadb:/docker-entrypoint-initdb.d
+      - ./db/gamifydb:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_USER=root
@@ -20,7 +20,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - .${pwd}/mariadb:/docker-entrypoint-initdb.d
+      - ./db/wavesdb:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_USER=root
@@ -29,8 +29,8 @@ services:
 
   redis:
     image: redis
-    expose:
-      - 6379
+    ports:
+      - "6379:6379"
   gamify:
     container_name: gamify-backend
     build: gamify

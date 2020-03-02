@@ -1,20 +1,16 @@
-const mariadb = require("mariadb");
-
 const mysql = require("mysql");
-
 
 (() => {
   setTimeout(async () => {
     console.log("connecting to db...");
     try {
-      
       const conn = await mysql.createConnection(
         {
-          host:  "localhost", //"172.17.0.1",
+          host: "172.17.0.1", //"172.17.0.1",
           user: "root",
           password: "password",
           database: "wavesdb",
-          port:"3307"
+          port: "3307"
         },
         { multipleStatements: true }
       );
@@ -28,4 +24,3 @@ const mysql = require("mysql");
     }
   }, 15000);
 })();
-

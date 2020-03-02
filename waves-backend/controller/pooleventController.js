@@ -5,7 +5,6 @@ const { savePoolevent } = require("../service/pooleventService");
 const { saveLocation } = require("../service/locationService");
 const { saveDescription } = require("../service/descriptionService");
 const { getEntriesByTableName } = require("../service/abstractService");
-
 const { fetchUserById } = require("../service/usersService");
 
 // @desc get all poolevents
