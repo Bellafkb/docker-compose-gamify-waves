@@ -9,6 +9,8 @@ const { verify, verifyX } = require("../middleware/tokenChecker");
 const { pooleventAccessControl } = require("../middleware/accessControlChecker");
 
 const { getApplicationsUser } = require("../controller/applicationController");
+const { publishEventCreated } = require("../service/publisherService");
+
 
 const {
   postBadge,
@@ -18,6 +20,7 @@ const {
 } = require("../controller/badgesController");
 
 router.get("/", (req, res) => {
+  publishEventCreated()
   res.json({
     success: true,
     message: "i'm alive!"
