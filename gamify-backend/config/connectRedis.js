@@ -13,15 +13,6 @@ const port_redis = "6379";
     subscriber.subscribe("notification");
     
     
-    let publisher = await redis.createClient(port_redis);
-    console.log(`cache redis connected to port ${port_redis}`);
-
-    publisher.publish(
-      "notification",
-      JSON.stringify({scoop: "scoop"})
-    );
-
-    
   } catch (error) {
     console.log(error);
   }

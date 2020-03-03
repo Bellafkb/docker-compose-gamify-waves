@@ -7,3 +7,8 @@ exports.createCacheKey = (key, tableName) => {
 exports.generateUuid = () => {
   return v4();
 };
+
+exports.getDateNow = () => {
+  return new Date().getTime();
+};
+
