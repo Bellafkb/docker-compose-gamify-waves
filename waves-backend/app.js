@@ -62,7 +62,7 @@ app.use((error, req, res, callback) => {
     .json({ success: false, message: error.message });
 });
 
-const port = process.env.PORT || 5000;
+const port = 4000;
 
 server.listen(port, () => {
   console.log(

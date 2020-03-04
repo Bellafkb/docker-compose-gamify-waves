@@ -1,4 +1,4 @@
-const {} = require("../helper")
+const {getDateNow,generateUuid} = require("../helper")
 
 exports.getCrewRanking = async () => {
   try {
@@ -14,7 +14,7 @@ exports.getCrewRanking = async () => {
 exports.createLeaderboardEntry = async () => {
   try {
     const leaderboard = await global.conn.query(
-      "insert into crewLeaderboard value (?,?,?,?,?)"
+      "insert into crewLeaderboard value (?,?,?,?,?)", [,"1e",0,getDateNow(),getDateNow()]
     );
     return leaderboard;
   } catch (error) {

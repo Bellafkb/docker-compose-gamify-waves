@@ -29,9 +29,9 @@ services:
 
   redis:
     image: redis
-    ports:
-      - "6379:6379"
-  gamify:
+    expose:
+      - 6379
+  gamify-backend:
     container_name: gamify-backend
     build: gamify
     command: npm run dev

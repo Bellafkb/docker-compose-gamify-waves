@@ -9,3 +9,20 @@ const port_redis = "6379";
     console.log(error);
   }
 })();*/
+
+
+(async () => {
+  let publisher = await redis.createClient(port_redis);
+  publisher.publish(
+    "WAVES_BACKEND",
+    JSON.stringify({ scoop: "hello world" })
+  );
+  publisher.publish(
+    "1",
+    JSON.stringify({ scoop: "hello world" })
+  );
+  publisher.publish(
+    "2",
+    JSON.stringify({ scoop: "hello world" })
+  );
+})()
