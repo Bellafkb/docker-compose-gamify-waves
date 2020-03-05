@@ -1,9 +1,7 @@
 const router = require("express").Router()
+const { getRankedLeaderboard } = require("../controller/crewRankingController")
 
-router.get("/", (req,res)=>{
-    res.status(200).json({
-        success: true,
-        cewRanking:[]
-    })
-})
 
+router.get("/",getRankedLeaderboard)
+
+module.exports = router

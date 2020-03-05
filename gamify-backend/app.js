@@ -1,10 +1,11 @@
 require("./config/connectMysql");
 require("./config/connectRedis");
+require("./config/redisSubscriptions");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan")("dev");
 const express = require("express");
-const { achievementRouter, route } = require("./router");
+const { achievementRouter, route, crewRanking } = require("./router");
 const dotenv = require("dotenv");
 const cors = require("cors");
 
@@ -23,8 +24,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
-app.use("/", route);
-app.use("/achievement", achievementRouter);
+const base = "/gamify"
+app.use(base, route);
+app.use(base + "/achievement", achievementRouter);
+app.use(base + "/leaderboard", crewRanking);
+
 
 app.use((req, res, callback) => {
   const error = new Error("not found");

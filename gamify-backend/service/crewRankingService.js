@@ -1,9 +1,11 @@
 const { getDateNow, generateUuid } = require("../helper")
+const { getActionById } = require("../service/actionsService")
+
 
 exports.getCrewLeaderboard = async () => {
   try {
     const leaderboard = await global.conn.query(
-      "select * from crewLeaderboard"
+      "select * from crew_leaderboard"
     );
     return leaderboard;
   } catch (error) {
@@ -25,10 +27,10 @@ exports.createLeaderboardEntry = async (crewId) => {
   }
 };
 
-exports.updateLeaderboardEntryByCrewId = async (crewId, score) => {
+exports.incrementLeaderBoardEntryByCrewId = async (crewId, score) => {
   try {
     const leaderboard = await global.conn.query(
-      `UPDATE crew_leaderboard SET score=?, updated_at=? WHERE crew_id='${crewId}'`,
+      `UPDATE crew_leaderboard SET score=score + ?, updated_at=? WHERE crew_id='${crewId}'`,
       [score, getDateNow()]
     );
     return leaderboard;
@@ -37,6 +39,16 @@ exports.updateLeaderboardEntryByCrewId = async (crewId, score) => {
   }
 };
 
-exports.handleAction = (action)=>{
-  
+exports.handleAction = async (actionId, crewId) => {
+  try {
+    const action = await getActionById(actionId);
+    if (action.length) {
+      await this.incrementLeaderBoardEntryByCrewId(crewId, action[0].points)
+      return action;
+    } else {
+      return
+    }
+  } catch (error) {
+    throw error;
+  }
 }
