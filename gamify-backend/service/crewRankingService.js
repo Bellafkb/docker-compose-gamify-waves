@@ -22,7 +22,7 @@ exports.createLeaderboardEntry = async crewId => {
     throw error;
   }
 };
-
+//test
 exports.updateLeaderboardEntryByCrewId = async (crewId, score) => {
   try {
     const leaderboard = await global.conn.query(
