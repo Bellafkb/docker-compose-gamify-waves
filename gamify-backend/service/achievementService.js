@@ -21,4 +21,3 @@ exports.createAchievement = async (name, desc) => {
   }
 };
 
-exports.saveChallenge = id => {};

@@ -1,6 +1,6 @@
-const {} = require("../helper")
+const { getDateNow, generateUuid } = require("../helper")
 
-exports.getCrewRanking = async () => {
+exports.getCrewLeaderboard = async () => {
   try {
     const leaderboard = await global.conn.query(
       "select * from crewLeaderboard"
@@ -11,18 +11,20 @@ exports.getCrewRanking = async () => {
   }
 };
 
-exports.createLeaderboardEntry = async () => {
+
+exports.createLeaderboardEntry = async (crewId) => {
   try {
+    const timestamp = getDateNow()
     const leaderboard = await global.conn.query(
       "INSERT INTO crew_leaderboard value (?,?,?,?,?)",
-      [generateUuid(), crewId, 0, getDateNow(), getDateNow()]
+      [generateUuid(), crewId, 0, timestamp, timestamp]
     );
     return leaderboard;
   } catch (error) {
     throw error;
   }
 };
-//test
+
 exports.updateLeaderboardEntryByCrewId = async (crewId, score) => {
   try {
     const leaderboard = await global.conn.query(
@@ -34,3 +36,7 @@ exports.updateLeaderboardEntryByCrewId = async (crewId, score) => {
     throw error;
   }
 };
+
+exports.handleAction = (action)=>{
+  
+}
