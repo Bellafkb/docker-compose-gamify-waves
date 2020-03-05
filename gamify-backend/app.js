@@ -1,5 +1,4 @@
 require("./config/connectMysql");
-require("./service/mysqlevent");
 require("./config/connectRedis");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");

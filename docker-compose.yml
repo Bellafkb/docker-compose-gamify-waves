@@ -33,7 +33,7 @@ services:
       - 6379
   gamify-backend:
     container_name: gamify-backend
-    build: gamify
+    build: gamify-backend
     command: npm run dev
     restart: always
     volumes:
