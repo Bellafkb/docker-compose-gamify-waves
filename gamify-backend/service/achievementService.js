@@ -1,4 +1,4 @@
-const { generateUuid } = require("../helper");
+const { generateUuid, getDateNow } = require("../helper");
 
 exports.fetchAchievements = async () => {
   try {
@@ -13,7 +13,7 @@ exports.createAchievement = async (name, desc) => {
   try {
     const dbresponse = await global.conn.query(
       "INSERT INTO achievements value (?,?,?,?,?,?)",
-      [generateUuid(), name, "TESTUSER", 1, desc, new Date().getTime()]
+      [generateUuid(), name, "TESTUSER", 1, desc, getDateNow()]
     );
     return dbresponse;
   } catch (error) {

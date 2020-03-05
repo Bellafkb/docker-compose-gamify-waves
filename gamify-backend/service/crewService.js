@@ -1,1 +1,8 @@
-exports.getCrewById = id => {};
+
+exports.getCrewById = id => {
+    
+};
+
+exports.getAllCrews = () => {
+
+}
