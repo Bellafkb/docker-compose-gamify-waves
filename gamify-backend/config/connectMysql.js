@@ -1,6 +1,6 @@
 const mariadb = require("mariadb");
 
-(() => {
+exports.connect = async () => {
   setTimeout(async () => {
     console.log("connecting to db...");
     try {
@@ -18,4 +18,8 @@ const mariadb = require("mariadb");
       throw error;
     }
   }, 1000);
+};
+
+(async () => {
+  await this.connect();
 })();

@@ -5,20 +5,29 @@ const {
   postAchievement,
   getAchievements
 } = require("../controller/achievementController");
-
 router
   .route("/")
   .get(getAchievements)
   .post(
     [
-      check("name")
+      check("badge.name")
         .notEmpty()
         .isString(),
-      check("desc")
+      check("badge.desc")
         .notEmpty()
-        .isString()
+        .isString(),
+        check("badge.img_url")
+        .notEmpty()
+        .isString(),
+        check("challenge.points")
+        .notEmpty()
+        .isString(),
+        check("challenge.type")
+        .notEmpty()
+        .isString(),
     ],
     postAchievement
   );
+
 
 module.exports = router;

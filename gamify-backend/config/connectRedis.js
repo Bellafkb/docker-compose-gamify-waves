@@ -11,8 +11,6 @@ const port_redis = "6379";
       );
     });
     subscriber.subscribe("notification");
-    
-    
   } catch (error) {
     console.log(error);
   }

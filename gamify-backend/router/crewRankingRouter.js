@@ -1,7 +1,6 @@
-const router = require("express").Router()
-const { getRankedLeaderboard } = require("../controller/crewRankingController")
+const router = require("express").Router();
+const { getRankedLeaderboard } = require("../controller/crewRankingController");
 
+router.get("/", getRankedLeaderboard);
 
-router.get("/",getRankedLeaderboard)
-
-module.exports = router
+module.exports = router;

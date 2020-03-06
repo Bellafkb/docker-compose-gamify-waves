@@ -2,7 +2,6 @@ const route = require("express").Router();
 const crewRanking = require("./crewRankingRouter");
 const achievementRouter = require("./achievementRouter");
 
-
 route.get("/", async (req, res) => {
   res.json({
     success: true,
@@ -12,15 +11,13 @@ route.get("/", async (req, res) => {
 
 route.get("/scoop", (req, res) => {
   try {
-    global.redis_client.get(1, (error, data) => { 
+    global.redis_client.get(1, (error, data) => {
       res.json({ data: JSON.parse(data) });
     });
   } catch (error) {
     console.log(error);
   }
-}); 
-
-
+});
 
 module.exports = {
   route,
