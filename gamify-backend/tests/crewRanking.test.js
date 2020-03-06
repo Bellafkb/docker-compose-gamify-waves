@@ -1,13 +1,14 @@
 const {
   createLeaderboardEntry,
-  incrementLeaderBoardEntryByCrewId: updateLeaderboardEntryByCrewId,
+  incrementLeaderBoardEntryByCrewId,
   handleAction,
   getCrewLeaderboard
 } = require("../service/crewRankingService");
+const { generateUuid } = require("../helper");
 
 const mariadb = require("mariadb");
 
-const CREWID = "CREWTESTID";
+const CREWID = generateUuid();
 
 const connect = async () => {
   try {
@@ -24,35 +25,33 @@ const connect = async () => {
   }
 };
 
-/*test("create new crew leaderboard entry", async () => {
+test("create new crew leaderboard entry", async () => {
   await connect();
-  const { affectedRows } = await createLeaderboardEntry("CREWTESTID");
+  const { affectedRows } = await createLeaderboardEntry(CREWID);
   expect(affectedRows).toBe(1);
   global.conn.end();
-});*/
-/*
+});
+
 test("update crew leaderboard entry", async () => {
   await connect();
-  const { affectedRows } = await updateLeaderboardEntryByCrewId(
-    "CREWTESTID",
-    2
+  const { affectedRows } = await incrementLeaderBoardEntryByCrewId(
+    generateUuid(),
+    20
   );
   expect(typeof affectedRows).toBe(typeof 1);
   global.conn.end();
-});*/
-
+});
 
 test("handleAction", async () => {
   await connect();
-  const response = await handleAction("READ",CREWID);
-  expect(response[0].id_action).toBe("READ");
+  const response = await handleAction("READ", generateUuid(), generateUuid());
+  expect(response).toBe(true);
   await global.conn.end();
 });
 
-
-test("fetch crew leaderboard", async () => {
+test("get crew leaderboard", async () => {
   await connect();
   const leaderboard = await getCrewLeaderboard();
-  expect(leaderboard.length>0).toBe(true);
+  expect(leaderboard.length != undefined).toBe(true);
   await global.conn.end();
 });
