@@ -17,11 +17,14 @@ const connect = async () => {
   }
 };
 
+const userid = "8d411dc4-e76f-4d0e-a027-056a0bc43be5"
+
 test("handleMessage", async () => {
   await connect();
   const response = await handleMessage(
-    "APPLICATION",
-    generateUuid(),
+    "READ",
+    //"4a74141e-c2c0-46a0-9c0c-84bef8be7d0f",
+    userid,
     generateUuid()
   );
   expect(response).toBe(true);

@@ -1,4 +1,4 @@
-const { createChallenge } = require("../service/challengesService");
+const { createChallenge,getAllChallengesIds } = require("../service/challengesService");
 
 const mariadb = require("mariadb");
 
@@ -20,4 +20,10 @@ test("create challenge", async () => {
   await connect();
   const response = await createChallenge("poolevents", 20);
   expect(response.type).toBe("poolevents");
+});
+
+test("get challengeids", async () => {
+  await connect();
+  const response = await getAllChallengesIds();
+  expect(response.length>0).toBe(true);
 });

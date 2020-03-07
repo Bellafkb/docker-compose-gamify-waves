@@ -1,12 +1,26 @@
-const { isNewCrew, initUserProfile } = require("./userService");
-const { handleAction } = require("./crewRankingService");
+const { isNewUser, createUser } = require("./userService");
+const {
+  handleAction,
+  createLeaderboardEntry
+} = require("./crewRankingService");
+const { initNewUserAchievement } = require("./achievementService");
+const { createCrew, fetchCrewByUserId, isNewCrew } = require("./crewService");
 
 exports.handleMessage = async (category, userId, sourceId) => {
   try {
-    if (!await isNewCrew(userId)) {
-      await initUserProfile(userId);
+    const { id, name } = await fetchCrewByUserId(userId);
+
+    if (!(await isNewUser(userId))) {
+      await createUser(userId, id);
+      await initNewUserAchievement(userId);
     }
-    await handleAction(category, userId, sourceId);
+
+    if (!(await isNewCrew(id))) {
+      await createCrew(id, name);
+      await createLeaderboardEntry(id);
+    }
+    //todo add crewid
+    await handleAction(category, userId, sourceId, id);
     return true;
   } catch (error) {
     throw error;

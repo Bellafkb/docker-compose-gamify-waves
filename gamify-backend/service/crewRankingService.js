@@ -1,6 +1,5 @@
 const { getDateNow, generateUuid } = require("../helper");
 const { getActionById } = require("../service/actionsService");
-
 const {
   isDuplicate,
   saveActionHistory
@@ -43,19 +42,18 @@ exports.incrementLeaderBoardEntryByCrewId = async (crewId, score) => {
   }
 };
 
-exports.handleAction = async (category, crewId, sourceId) => {
+exports.handleAction = async (category, userId, sourceId,crewId) => {
   try {
     if (!(await isDuplicate(crewId, sourceId, category))) {
       await saveActionHistory(crewId, crewId, sourceId, category);
       const action = await getActionById(category);
       if (action.length > 0) {
-
         await this.incrementLeaderBoardEntryByCrewId(crewId, action[0].points);
         return true;
       } else {
         return false;
       }
-    }else{
+    } else {
       return false;
     }
   } catch (error) {

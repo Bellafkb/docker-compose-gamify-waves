@@ -1,8 +1,11 @@
 const { generateUuid, getDateNow } = require("../helper");
 const { createBadge } = require("../service/badgeService");
-const { createChallenge } = require("../service/challengesService");
 const { getAllUsers } = require("../service/userService");
-
+const { createChallengeProgress } = require("../service/progressService");
+const {
+  createChallenge,
+  getAllChallengesIds
+} = require("../service/challengesService");
 
 exports.fetchAchievements = async () => {
   try {
@@ -26,6 +29,7 @@ exports.createAchievement = async (name, desc, type, img_url, points) => {
       badge.idbadge,
       challenge.idchallenge
     ]);
+    this.initNewAchievementForUsers(challenge.idchallenge);
     return {
       badge,
       challenge,
@@ -40,20 +44,28 @@ exports.createAchievement = async (name, desc, type, img_url, points) => {
     throw error;
   }
 };
-//TODO: init achievements
-exports.initNewUserAchievement = async (idchallenge) => {
+
+exports.initNewUserAchievement = async userId => {
   try {
-    const timestamp= getDateNow()
+    const challengeIds = await getAllChallengesIds();
+    challengeIds.map(async ({ idchallenge }) => {
+      await createChallengeProgress(userId, idchallenge);
+    });
+
+    return true;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.initNewAchievementForUsers = async idchallenge => {
+  try {
     const users = await getAllUsers();
-    if(users.length>0){
-      users.map(({iduser})=>{
-        await global.conn.query(
-          "INSERT INTO challenge_progress value (?,?,?,?,?,?)",
-          [iduser, idchallenge, 0, timestamp, timestamp, generateUuid() ]
-        );
-      })
+    if (users.length > 0) {
+      users.map(async ({ iduser }) => {
+        await (iduser, idchallenge);
+      });
     }
-    
     return true;
   } catch (error) {
     throw error;

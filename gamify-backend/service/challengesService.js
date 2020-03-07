@@ -19,3 +19,14 @@ exports.createChallenge = async (type, points) => {
     throw error;
   }
 };
+
+exports.getAllChallengesIds = async () => {
+  try {
+    const challengeIds = await global.conn.query(
+      "SELECT c.idchallenge FROM challenges AS c;"
+    );
+    return challengeIds;
+  } catch (error) {
+    throw error;
+  }
+};
