@@ -8,11 +8,7 @@ const {
   saveUser,
   getUserById
 } = require("../service/usersService");
-const {
-  initNewUsersAchievements,
-  checkProfileComplete,
-  checkProfileVerified
-} = require("../service/gamificationService");
+
 
 exports.authenticate = async (req, res) => {
   try {
@@ -56,33 +52,28 @@ exports.authenticate = async (req, res) => {
                 error: error
               });
             }
-            initNewUsersAchievements(p.id, error => {
-              if (error) {
-                res.json(400).json({ success: false, error });
-              }
-              res.cookie(
-                "roles",
-                p.roles.length < 2 ? p.roles[0].role : p.roles[1].role
-              );
+            res.cookie(
+              "roles",
+              p.roles.length < 2 ? p.roles[0].role : p.roles[1].role
+            );
 
-              if (p.profile[0].supporter.roles) {
-                res.cookie("CREW_ROLE", p.profiles[0].supporter.roles[0].name);
-                res.cookie(
-                  "CREW_CITY",
-                  p.profiles[0].supporter.roles[0].crew.name
-                );
-              }
-
-              let signed = jwt.sign(p, process.env.JWT_SECRET);
-              res.cookie("WAVES_JWT", signed);
-              res.cookie("full_name", p.profiles[0].supporter.fullName.trim());
+            if (p.profile[0].supporter.roles) {
+              res.cookie("CREW_ROLE", p.profiles[0].supporter.roles[0].name);
               res.cookie(
-                "first_name",
-                p.profiles[0].supporter.firstName.trim()
+                "CREW_CITY",
+                p.profiles[0].supporter.roles[0].crew.name
               );
-              res.cookie("last_name", p.profiles[0].supporter.lastName.trim());
-              res.cookie("access_token", s.access_token).redirect(state);
-            });
+            }
+
+            let signed = jwt.sign(p, process.env.JWT_SECRET);
+            res.cookie("WAVES_JWT", signed);
+            res.cookie("full_name", p.profiles[0].supporter.fullName.trim());
+            res.cookie(
+              "first_name",
+              p.profiles[0].supporter.firstName.trim()
+            );
+            res.cookie("last_name", p.profiles[0].supporter.lastName.trim());
+            res.cookie("access_token", s.access_token).redirect(state);
           });
         });
       } else {

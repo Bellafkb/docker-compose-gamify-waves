@@ -1,6 +1,5 @@
 const { saveNotification } = require("../service/notificationService");
 const { validationResult } = require("express-validator");
-const { checkChallengeComplete } = require("../service/gamificationService");
 const { savePoolevent } = require("../service/pooleventService");
 const { saveLocation } = require("../service/locationService");
 const { saveDescription } = require("../service/descriptionService");
@@ -97,7 +96,6 @@ exports.getPoolEventById = (req, res) => {
         message: `Error in getPoolEventById: ${err.message}`
       });
     } else {
-      console.log("-->", poolevent);
       if (poolevent.length > 0) {
         const {
           idevent_type,
@@ -128,15 +126,12 @@ exports.getPoolEventById = (req, res) => {
 
         fetchUserById(asp_event_id, (error, asp_event_id) => {
           if (error) {
-            console.log("scoop1");
             return res
               .status(400)
               .json({ success: false, message: error.message });
           }
           fetchUserById(user_id, (error, user) => {
             if (error) {
-              console.log("scoop2");
-
               return res
                 .status(400)
                 .json({ success: false, message: error.message });
@@ -190,7 +185,6 @@ exports.getPoolEventById = (req, res) => {
 // @desc  create poolevent
 // @route POST /api/v1/poolevent
 // @access Private
-//TODO: desc
 exports.postPoolEvent = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -203,8 +197,6 @@ exports.postPoolEvent = (req, res) => {
   front.user_id = req.user.id;
   savePoolevent(front, (error, pooleventResp) => {
     if (error) {
-      console.log("-->", error.message);
-
       res.status(400).json({
         message: error.message
       });
@@ -212,8 +204,6 @@ exports.postPoolEvent = (req, res) => {
     location.poolevent_id = pooleventResp.insertId;
     saveLocation(location, (error, locationResp) => {
       if (error) {
-        console.log("-->", error.message);
-
         res.status(400).json({
           message: error
         });
@@ -221,14 +211,10 @@ exports.postPoolEvent = (req, res) => {
       description.poolevent_id = pooleventResp.insertId;
       saveDescription(description, (error, descriptionResp) => {
         if (error) {
-          console.log("-->", error.message);
-
           res.status(400).json({ message: error.message });
         }
         saveNotification("poolevents", pooleventResp.insertId, error => {
           if (error) {
-            console.log("-->", error.message);
-
             res.status(400).json({ message: error.message });
           }
           checkChallengeComplete(
@@ -236,8 +222,6 @@ exports.postPoolEvent = (req, res) => {
             req.user.id,
             (error, progress) => {
               if (error) {
-                console.log("-->", error.message);
-
                 res
                   .status(400)
                   .json({ success: false, message: error.message });
@@ -308,7 +292,6 @@ exports.deletePoolEvent = (req, res) => {
 exports.putPoolEvent = (req, res) => {
   const { body } = req;
   const { id } = req.params;
-  console.log("-->", body);
   global.conn.query(
     `UPDATE poolevents SET ? WHERE id =${id};`,
     body.front,
@@ -325,8 +308,6 @@ exports.putPoolEvent = (req, res) => {
             body.location,
             (error, response) => {
               if (error) {
-                console.log("1", error.message);
-
                 res.status(400).json({
                   success: false,
                   message: `Error in putPoolEvent: ${error.message}`
@@ -340,7 +321,6 @@ exports.putPoolEvent = (req, res) => {
               body.description,
               (error, response) => {
                 if (error) {
-                  console.log("2", error.message);
                   res.status(400).json({
                     success: false,
                     message: `Error in putPoolEvent: ${error.message}`
@@ -364,8 +344,6 @@ exports.putPoolEvent = (req, res) => {
             body.description,
             (error, response) => {
               if (error) {
-                console.log("3", error.message);
-
                 res.status(400).json({
                   success: false,
                   message: `Error in putPoolEvent: ${error.message}`
@@ -384,7 +362,6 @@ exports.putPoolEvent = (req, res) => {
   );
 };
 
-//TODO:
 // @desc edit poolevent by id
 // @route PUT /api/v1/poolevent/:id
 // @access Private

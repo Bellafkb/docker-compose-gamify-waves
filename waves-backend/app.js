@@ -17,9 +17,7 @@ const notification = require("./router/notification");
 const eventtype = require("./router/pooleventType");
 const favorite = require("./router/favorite");
 const month = require("./router/month");
-const trophie = require("./router/trophies");
 const user = require("./router/user");
-
 
 require("colors");
 
@@ -46,7 +44,6 @@ app.use("/waves/api/v1/favorite", favorite);
 app.use("/waves/api/v1/user", user);
 app.use("/waves/api/v1/eventtype", eventtype);
 app.use("/waves/api/v1/month", month);
-app.use("/waves/api/v1/trophie", trophie);
 
 app.use((req, res, callback) => {
   const error = new Error("not found");

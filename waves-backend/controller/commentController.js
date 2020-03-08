@@ -1,5 +1,3 @@
-const { checkChallengeComplete } = require("../service/gamificationService");
-
 // @desc get comment by id
 // @route GET /api/v1/comment/:id
 // @access Public

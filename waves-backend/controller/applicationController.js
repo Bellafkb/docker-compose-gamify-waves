@@ -1,4 +1,3 @@
-const { checkChallengeComplete } = require("../service/gamificationService");
 const { fetchUserById } = require("../service/usersService");
 
 // @desc get all applications by poolevent
