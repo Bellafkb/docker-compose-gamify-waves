@@ -30,3 +30,4 @@ exports.getAllChallengesIds = async () => {
     throw error;
   }
 };
+

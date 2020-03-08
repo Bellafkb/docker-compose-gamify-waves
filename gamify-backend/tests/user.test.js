@@ -38,12 +38,6 @@ const connect = async () => {
  * 
  */
 
-test("isNewCrew", async () => {
-  await connect();
-  const response = await isNewCrew(CREWID);
-  expect(response).toBe(false);
-  await global.conn.end();
-});
 
 test("isNewUser", async () => {
   await connect();

@@ -5,10 +5,14 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan")("dev");
 const express = require("express");
-const { achievementRouter, route, crewRanking } = require("./router");
+const {
+  achievementRouter,
+  route,
+  crewRanking,
+  actionsRouter
+} = require("./router");
 const dotenv = require("dotenv");
 const cors = require("cors");
-
 
 require("colors");
 
@@ -24,11 +28,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
-const base = "/gamify"
+const base = "/gamify";
 app.use(base, route);
 app.use(base + "/achievement", achievementRouter);
 app.use(base + "/leaderboard", crewRanking);
-
+app.use(base + "/action", actionsRouter);
 
 app.use((req, res, callback) => {
   const error = new Error("not found");

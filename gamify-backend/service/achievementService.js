@@ -9,7 +9,9 @@ const {
 
 exports.fetchAchievements = async () => {
   try {
-    const achievements = await global.conn.query(`select * from achievements;`);
+    const achievements = await global.conn.query(`select * from achievements a 
+    left join challenges c on a.challenge_id =c.idchallenge 
+    left join badges b on b.idbadge =a.badge_id ;`);
     return achievements;
   } catch (error) {
     throw error;
@@ -63,7 +65,7 @@ exports.initNewAchievementForUsers = async idchallenge => {
     const users = await getAllUsers();
     if (users.length > 0) {
       users.map(async ({ iduser }) => {
-        await (iduser, idchallenge);
+        await createChallengeProgress(iduser, idchallenge);
       });
     }
     return true;

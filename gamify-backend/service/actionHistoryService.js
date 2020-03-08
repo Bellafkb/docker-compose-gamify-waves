@@ -12,11 +12,13 @@ exports.saveActionHistory = async (crewId, userId, sourceId, category) => {
   }
 };
 
-//takes crewId and
 exports.isDuplicate = async (crewId, sourceId, category) => {
   try {
     const dbresponse = await global.conn.query(
-      "SELECT * FROM action_history where crew_id=? AND idhistory=? AND category=?;",
+      `SELECT * FROM action_history 
+      where crew_id=? 
+      AND idhistory=? 
+      AND category=?;`,
       [crewId, sourceId, category]
     );
     return dbresponse.length>0;

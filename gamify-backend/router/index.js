@@ -1,6 +1,8 @@
 const route = require("express").Router();
 const crewRanking = require("./crewRankingRouter");
 const achievementRouter = require("./achievementRouter");
+const actionsRouter = require("./actionRouter");
+
 
 route.get("/", async (req, res) => {
   res.json({
@@ -22,5 +24,6 @@ route.get("/scoop", (req, res) => {
 module.exports = {
   route,
   crewRanking,
-  achievementRouter
+  achievementRouter,
+  actionsRouter
 };

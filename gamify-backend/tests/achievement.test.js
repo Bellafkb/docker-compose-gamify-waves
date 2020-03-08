@@ -22,14 +22,15 @@ const connect = async () => {
 test("achievement", async () => {
   await connect();
   const response = await createAchievement(
-    "informed",
-    "read the onboarding informations",
-    "poolevents",
+    "new comment",
+    "comment",
+    "comments",
     "loremscoop",
-    30
+    3
   );
-  expect(response.badge.name).toBe("indormed");
+  expect(response.badge.name).toBe("new comment");
 });
+
 /*
 test("new user create challengeprogress", async () => {
   await connect();

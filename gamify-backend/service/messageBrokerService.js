@@ -19,7 +19,7 @@ exports.handleMessage = async (category, userId, sourceId) => {
       await createCrew(id, name);
       await createLeaderboardEntry(id);
     }
-    //todo add crewid
+    //todo add crewid--> id = crewId
     await handleAction(category, userId, sourceId, id);
     return true;
   } catch (error) {
