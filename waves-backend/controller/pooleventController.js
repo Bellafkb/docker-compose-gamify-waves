@@ -84,10 +84,9 @@ exports.getPoolEventById = (req, res) => {
   const { id } = req.params;
   const sql = `SELECT *,pt.name as type_name, pt.idevent_type, 
               p.name as event_name FROM poolevents AS p  
-              JOIN locations l ON p.id=l.poolevent_id 
-              JOIN descriptions d ON d.poolevent_id=p.id
-              JOIN poolevent_types pt ON pt.idevent_type=p.idevent_type
-              LEFT JOIN poolevent_trophies ptt on ptt.poolevent_id = p.id
+              LEFT JOIN locations l ON p.id=l.poolevent_id 
+              LEFT JOIN descriptions d ON d.poolevent_id=p.id
+              LEFT JOIN poolevent_types pt ON pt.idevent_type=p.idevent_type
               WHERE p.id=${id};`;
   global.conn.query(sql, (err, poolevent) => {
     if (err) {

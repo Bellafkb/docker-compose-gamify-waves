@@ -1,4 +1,20 @@
-test("achievement", async () => {
-    expect(1+1).toBe(2);
-  });
-  
+const {
+  getTodaysCreatedEvents,
+  saveTrophies
+} = require("../service/intervalTrophieService");
+const { generateUuid } = require("../helper");
+
+const uuid = generateUuid();
+
+test("get todays events", async () => {
+  const events = await getTodaysCreatedEvents();
+  expect(events.length > 0).toBe(true);
+});
+
+
+test("get score", async () => {
+  const events = await getTodaysCreatedEvents();
+  const scores = await saveTrophies(events);
+  expect(scores).toBe(true);
+});
+

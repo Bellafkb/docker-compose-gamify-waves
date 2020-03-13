@@ -1,10 +1,12 @@
 const { getDateNow, generateUuid } = require("../helper");
+const { connectToDb } = require("../config/connectMysql");
 
 exports.createBadge = async (name, desc, type, img_url) => {
   try {
+    const conn = await connectToDb();
     const uuid = generateUuid();
     const now = getDateNow();
-    await global.conn.query("insert into badges value (?,?,?,?,?,?,?)", [
+    await conn.query("insert into badges value (?,?,?,?,?,?,?)", [
       uuid,
       name,
       desc,
@@ -13,6 +15,8 @@ exports.createBadge = async (name, desc, type, img_url) => {
       now,
       img_url
     ]);
+    conn.end()
+    conn.destroy()
     return {
       idbadge: uuid,
       name,

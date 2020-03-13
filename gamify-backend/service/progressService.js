@@ -1,15 +1,21 @@
 const { generateUuid, getDateNow } = require("../helper");
 const { getActionById } = require("../service/actionsService");
+const { connectToDb } = require("../config/connectMysql");
+
 
 exports.createChallengeProgress = async (userId, challenge_id) => {
   try {
+    const conn = await connectToDb()
     const uuid = generateUuid();
     const timestamp = getDateNow();
     const score = 0;
-    await global.conn.query(
+
+    await conn.query(
       "insert into challenge_progress value (?,?,?,?,?,?,?)",
       [userId, challenge_id, score, timestamp, timestamp, uuid, 0]
     );
+    conn.end()
+    conn.destroy()
     return {
       idcp: uuid,
       challenge_id: challenge_id,
@@ -24,7 +30,8 @@ exports.createChallengeProgress = async (userId, challenge_id) => {
 
 exports.incrementScorebyUserId = async (userId, type) => {
   try {
-    await global.conn.query(
+    const conn = await connectToDb()
+    await conn.query(
       `UPDATE challenge_progress cp 
       INNER JOIN challenges c 
       ON cp.challenge_id=c.idchallenge 
@@ -32,6 +39,8 @@ exports.incrementScorebyUserId = async (userId, type) => {
       AND c.type=? AND cp.completed=0`,
       [userId, type]
     );
+    conn.destroy()
+    conn.end()
     return true;
   } catch (error) {
     throw error;
@@ -40,7 +49,9 @@ exports.incrementScorebyUserId = async (userId, type) => {
 
 exports.getCompletedChallenges = async userId => {
   try {
-    const idcps = await global.conn.query(
+    const conn = await connectToDb()
+
+    const idcps = await conn.query(
       `SELECT cp.idcp FROM challenges c 
       join challenge_progress cp 
       on cp.challenge_id =c.idchallenge 
@@ -48,6 +59,8 @@ exports.getCompletedChallenges = async userId => {
       WHERE cp.user_id =? and cp.completed=0;`,
       [userId]
     );
+    conn.destroy()
+    conn.end()
     return idcps;
   } catch (error) {
     throw error;
@@ -56,12 +69,15 @@ exports.getCompletedChallenges = async userId => {
 
 exports.setCompletedChallenges = async progressIds => {
   try {
+    const conn = await connectToDb()
     await progressIds.map(async ({ idcp }) => {
-      await global.conn.query(
+      await conn.query(
         `update challenge_progress set completed=1 where idcp=?`,
         [idcp]
       );
     });
+    conn.end()
+    conn.destroy()
 
     return true;
   } catch (error) {

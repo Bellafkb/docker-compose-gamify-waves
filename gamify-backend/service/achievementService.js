@@ -6,12 +6,17 @@ const {
   createChallenge,
   getAllChallengesIds
 } = require("../service/challengesService");
+const { connectToDb } = require("../config/connectMysql");
 
 exports.fetchAchievements = async () => {
   try {
-    const achievements = await global.conn.query(`select * from achievements a 
+    const conn = await connectToDb();
+    const achievements = await conn.query(`select * from achievements a 
     left join challenges c on a.challenge_id =c.idchallenge 
-    left join badges b on b.idbadge =a.badge_id ;`);
+    left join badges b on b.idbadge =a.badge_id;`);
+    conn.end();
+    conn.destroy()
+
     return achievements;
   } catch (error) {
     throw error;
@@ -20,18 +25,20 @@ exports.fetchAchievements = async () => {
 
 exports.createAchievement = async (name, desc, type, img_url, points) => {
   try {
-    console.log(name, desc, type, img_url, points);
+    const conn = await connectToDb();
     const timestamp = getDateNow();
     const uuid = generateUuid();
     const badge = await createBadge(name, desc, type, img_url);
     const challenge = await createChallenge(type, points);
-    await global.conn.query("insert into achievements value (?,?,?,?)", [
+    await conn.query("insert into achievements value (?,?,?,?)", [
       uuid,
       timestamp,
       badge.idbadge,
       challenge.idchallenge
     ]);
     this.initNewAchievementForUsers(challenge.idchallenge);
+    conn.end()
+    conn.destroy()
     return {
       badge,
       challenge,
@@ -53,7 +60,6 @@ exports.initNewUserAchievement = async userId => {
     challengeIds.map(async ({ idchallenge }) => {
       await createChallengeProgress(userId, idchallenge);
     });
-
     return true;
   } catch (error) {
     throw error;

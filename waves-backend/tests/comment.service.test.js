@@ -1,4 +1,4 @@
-const { saveApplication } = require("../service/applicationService");
+const { saveComment } = require("../service/commentService");
 const { TEST_USER, generateUuid } = require("../helper");
 
 process.env.OAUTH_BASE_URI = "https://stage.vivaconagua.org";
@@ -8,7 +8,7 @@ process.env.REDIRECT_URI = "http://localhost/waves/api/v1/oauth";
 const userId = TEST_USER.userId;
 
 test("save event", async () => {
-  await saveApplication("TEST TEXT", userId, generateUuid(), (error, event) => {
+  await saveComment("TEST TEXT", userId, generateUuid(), (error, event) => {
     if (error) {
       throw error;
     }

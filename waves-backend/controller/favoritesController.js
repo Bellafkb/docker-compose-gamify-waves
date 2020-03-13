@@ -1,4 +1,5 @@
 const { incrementFaveCount } = require("../service/pooleventService");
+
 // @desc get favorite by userId
 // @route GET /api/v1/favorite/:id
 // @access private

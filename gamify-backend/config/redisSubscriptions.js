@@ -6,12 +6,12 @@ const port_redis = "6379";
   let subscriber = await redis.createClient(port_redis);
   subscriber.on("message", async function(channel, message) {
     console.log(`message: ${message}, on channel: ${channel}`);
-    const { category, userId, sourceId } = JSON.parse(message);
-    if (category && userId && sourceId) {
-      await handleMessage(category, userId, sourceId);
+    const { action, userId, sourceId } = JSON.parse(message);
+    if (action && userId && sourceId) {
+      await handleMessage(action, userId, sourceId);
     } else {
       console.log(
-        `invalide message category: ${category}, userId: ${userId}, sourceId: ${sourceId}`
+        `invalide message value log --> category: ${category}, userId: ${userId}, sourceId: ${sourceId}`
       );
     }
   });

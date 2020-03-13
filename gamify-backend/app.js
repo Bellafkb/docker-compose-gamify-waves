@@ -1,6 +1,7 @@
 require("./config/connectMysql");
 require("./config/connectRedis");
 require("./config/redisSubscriptions");
+require("./service/intervalTrophieService");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan")("dev");
@@ -49,5 +50,5 @@ app.use((error, req, res, callback) => {
 const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
-  console.log(`App running in ${port} mode on port ${port}`.green.bold);
+  console.log(`App running in ${port} mode on port ${port}`.rainbow);
 });

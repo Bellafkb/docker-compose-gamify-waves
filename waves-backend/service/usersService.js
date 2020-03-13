@@ -154,13 +154,6 @@ exports.fetchProfile = async access_token => {
     const { data } = await axios.get(
       `${process.env.OAUTH_BASE_URI}/drops/oauth2/rest/profile?access_token=${access_token}`
     );
-
-    console.log("-->", data);
-
-    console.log(
-      `${process.env.OAUTH_BASE_URI}/drops/oauth2/rest/profile?access_token=${access_token}`
-    );
-
     const user = await axios.post(
       `${process.env.OAUTH_BASE_URI}/drops/rest/user/${data.id}?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}`,
       {}

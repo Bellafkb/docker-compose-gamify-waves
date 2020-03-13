@@ -2,6 +2,7 @@ const {
   fetchAchievements,
   createAchievement
 } = require("../service/achievementService");
+const {validationResult} =require("express-validator")
 
 exports.getAchievements = async (req, res) => {
   try {
@@ -21,6 +22,13 @@ exports.getAchievements = async (req, res) => {
 //type has to be in challenges => multiplicity
 exports.postAchievement = async (req, res) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        success: false,
+        errors: errors.array()
+      });
+    }
     const { badge, challenge } = req.body;
     const { name, img_url, desc } = badge;
     const { points, type } = challenge;

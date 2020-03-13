@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { connectToDb } = require("../config/connectMysql");
 
 exports.fetchCrewByUserId = async userId => {
   try {
@@ -28,7 +29,10 @@ exports.getAllCrews = () => {};
 
 exports.createCrew = async (crewId, name) => {
   try {
-    await global.conn.query("insert into crews value (?,?)", [crewId, name]);
+    const conn = await connectToDb();
+    await conn.query("insert into crews value (?,?)", [crewId, name]);
+    conn.end();
+    conn.destroy()
     return {
       crewId,
       name
@@ -40,10 +44,13 @@ exports.createCrew = async (crewId, name) => {
 
 exports.isNewCrew = async userId => {
   try {
-    const user = await global.conn.query(
-      "select * from crews where idcrew=?",
-      [userId]
-    );
+    const conn = await connectToDb();
+    const user = await conn.query("select * from crews where idcrew=?", [
+      userId
+    ]);
+    conn.end();
+    conn.destroy()
+
     return user.length > 0;
   } catch (error) {
     throw error;

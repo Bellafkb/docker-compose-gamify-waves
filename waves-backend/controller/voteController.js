@@ -1,3 +1,4 @@
+const { saveVote } = require("../service/voteService");
 // @desc get vote by id
 // @route GET /api/v1/vote/:id
 // @access Public
@@ -25,23 +26,16 @@ exports.getvoteByCommentId = (req, res) => {
 // @desc  create vote
 // @route POST /api/v1/vote
 // @access Private
-//TODO: desc
 exports.postvote = (req, res) => {
-  const { body } = req;
+  const { user_id, comment_id } = req.body;
   const { id } = req.user;
-  body.user_id = id;
+  const user_id = id;
 
-  global.conn.query(`INSERT INTO votes SET ?`, body, (error, vote) => {
+  saveVote(user_id, comment_id, (error, vote) => {
     if (error) {
       res.status(400).json({ success: false, messaage: error.message });
-    } else {
-      checkChallengeComplete("votes", id, (error, resp) => {
-        if (error) {
-          res.status(400).json({ success: false, messaage: error.message });
-        }
-        res.status(200).json({ success: true, data: vote });
-      });
     }
+    res.json({ success: true, vote });
   });
 };
 

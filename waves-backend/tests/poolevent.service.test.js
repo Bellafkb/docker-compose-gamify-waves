@@ -1,19 +1,32 @@
-const mariadb = require("mariadb");
-const { fetchUserById,fetchCrewByUserId } = require("../service/usersService");
+const { savePoolevent } = require("../service/pooleventService");
+const { TEST_USER } = require("../helper");
 
-process.env.OAUTH_BASE_URI="https://stage.vivaconagua.org"
-process.env.CLIENT_ID="wavesdev"
-process.env.CLIENT_SECRET="wavesdev"
-process.env.REDIRECT_URI="http://localhost/waves/api/v1/oauth"
+process.env.OAUTH_BASE_URI = "https://stage.vivaconagua.org";
+process.env.CLIENT_ID = "wavesdev";
+process.env.CLIENT_SECRET = "wavesdev";
+process.env.REDIRECT_URI = "http://localhost/waves/api/v1/oauth";
+const userId = TEST_USER.userId;
 
-test("fetch user by id", () => {
-  fetchUserById("4a74141e-c2c0-46a0-9c0c-84bef8be7d0f", (error, user) => {
-    expect(user.id).toBe("4a74141e-c2c0-46a0-9c0c-84bef8be7d0f");
-  });
-});
 
-test("fetch crew by user_id", () => {
-  fetchCrewByUserId("4a74141e-c2c0-46a0-9c0c-84bef8be7d0f", (error, crew) => {
-    expect(typeof(crew)).toBe(Array);
-  });
+test("save event", () => {
+  savePoolevent(
+    "test",
+    1231231312,
+    123141234231,
+    12123123123,
+    13112314,
+    13123123,
+    "website",
+    1,
+    1,
+    userId,
+    321,
+    1,
+    (error, event) => {
+      if (error) {
+        throw error;
+      }
+      expect(event.name).toBe("test");
+    }
+  );
 });

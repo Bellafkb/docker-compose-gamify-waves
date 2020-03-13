@@ -1,3 +1,4 @@
+const {connectToDb} = require("../config/connectMysql")
 exports.getUserProfileById = id => {};
 
 
@@ -5,7 +6,10 @@ exports.getUserProfileById = id => {};
 
 exports.getAllUsers = async () => {
   try {
-    const users = await global.conn.query("SELECT u.iduser FROM users AS u;");
+    const conn = await connectToDb()
+    const users = await conn.query("SELECT u.iduser FROM users AS u;");
+    conn.end()
+    conn.destroy()
     return users;
   } catch (error) {
     throw error;
@@ -14,9 +18,12 @@ exports.getAllUsers = async () => {
 
 exports.isNewUser = async userId => {
   try {
-    const user = await global.conn.query("select * from users where iduser=?", [
+    const conn = await connectToDb()
+    const user = await conn.query("select * from users where iduser=?", [
       userId
     ]);
+    await conn.end()
+    await conn.destroy()
     return user.length > 0;
   } catch (error) {
     throw error;
@@ -25,7 +32,9 @@ exports.isNewUser = async userId => {
 
 exports.createUser = async (userId, crewId) => {
   try {
-    await global.conn.query("INSERT INTO users value (?,?)", [userId, crewId]);
+    const conn = await connectToDb()
+    await conn.query("INSERT INTO users value (?,?)", [userId, crewId]);
+    conn.end()
     return {
       userId,
       crewId

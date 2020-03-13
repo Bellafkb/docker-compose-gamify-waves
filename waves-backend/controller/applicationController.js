@@ -59,8 +59,15 @@ const getStatistic = (applications, callback) => {
   applications.map((application, i) => {
     global.conn.query(
       `select * from  
-      (select count(*) as rejected_count from applications where state="rejected" and user_id="${application.user_id}")as rejected, 
-      (select count(*)as accepted_count from applications where state="accepted" and user_id="${application.user_id}") as accepted;`,
+      (select count(*) as rejected_count 
+      from applications where state="rejected" 
+      and user_id="${application.user_id}") 
+      as rejected, 
+      (select count(*) as accepted_count 
+      from applications 
+      where state="accepted" 
+      and user_id="${application.user_id}") 
+      as accepted;`,
       (error, resp) => {
         if (error) {
           callback(error);
@@ -81,7 +88,12 @@ const getStatistic = (applications, callback) => {
 // @access Private
 exports.getApplicationsUser = (req, res) => {
   const { id } = req.user;
-  const query = `SELECT a.created_at , a.text, a.state, p.name, a.poolevent_id, a.id 
+  const query = `SELECT a.created_at, 
+  a.text, 
+  a.state, 
+  p.name, 
+  a.poolevent_id, 
+  a.id 
   FROM applications a 
   JOIN poolevents p 
   on a.poolevent_id=p.id 
@@ -182,7 +194,6 @@ exports.deleteApplication = (req, res) => {
 exports.putApplication = (req, res) => {
   const { body } = req;
   const { id } = req.params;
-  console.log(body);
   global.conn.query(
     `UPDATE applications SET ? WHERE id="${id}";`,
     body,

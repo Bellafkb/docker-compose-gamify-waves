@@ -1,13 +1,20 @@
 const { getDateNow } = require("../helper");
+const { connectToDb } = require("../config/connectMysql");
+
 
 exports.createAction = async (name, points, type) => {
   try {
+    const conn = await connectToDb();
     const timestamp = getDateNow();
-    await global.conn.query(
+    await conn.query(
       `INSERT INTO actions 
        SET created_at = ?, id_action=?, points =?, type=?;`,
       [timestamp, name, points, type]
     );
+    conn.end()
+    conn.release()
+    conn.destroy()
+
     return {
       created_at: timestamp,
       id_action: name,
@@ -21,10 +28,14 @@ exports.createAction = async (name, points, type) => {
 
 exports.getActionById = async action => {
   try {
-    const dbaction = await global.conn.query(
+    const conn = await connectToDb();
+    const dbaction = await conn.query(
       "SELECT * FROM actions WHERE id_action=?",
       action
     );
+    await conn.end()
+    await conn.destroy()
+
     return dbaction;
   } catch (error) {
     throw error;
@@ -33,7 +44,10 @@ exports.getActionById = async action => {
 
 exports.getActions = async () => {
   try {
-    const dbaction = await global.conn.query("SELECT * FROM actions");
+    const conn = await connectToDb();
+    const dbaction = await conn.query("SELECT * FROM actions");
+    await conn.end()
+    await conn.destroy()
     return dbaction;
   } catch (error) {
     throw error;
