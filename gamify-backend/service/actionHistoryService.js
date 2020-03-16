@@ -14,8 +14,6 @@ exports.saveActionHistory = async (crewId, userId, sourceId, category) => {
       sourceId
     ]);
     await conn.end()
-    await conn.destroy()
-
     return {
       idhistory,
       category,
@@ -40,7 +38,6 @@ exports.isDuplicate = async (crewId, sourceId, category) => {
       [crewId, sourceId, category]
     );
     await conn.end()
-    await conn.destroy()
     return dbresponse.length > 0;
   } catch (error) {
     throw error;

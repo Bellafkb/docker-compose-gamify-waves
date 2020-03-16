@@ -2,10 +2,13 @@ const { connectToDb } = require("../config/connectMysql");
 const { generateUuid, getDateNow } = require("../helper");
 
 (async () => {
-  setInterval(async() => {
-    const scores =await this.getTodaysCreatedEvents()
-    await this.saveTrophies(scores)
-  }, 3000000);
+  setInterval(async () => {
+    console.log("interval activated")
+    const scores = await this.getTodaysCreatedEvents();
+    if (scores.length > 0) {
+      await this.saveTrophies(scores);
+    }
+  }, 10000 * 60 * 60 * 24);
 })();
 
 exports.getTodaysCreatedEvents = async () => {
@@ -14,15 +17,14 @@ exports.getTodaysCreatedEvents = async () => {
     const timestamp = new Date().getTime();
     const startTimestamp = new Date(timestamp).setHours(0, 0, 0, 0);
     const events = await conn.query(
-      `select source_id ,count(*) as num 
+      `select source_id, count(*) as num 
       from action_history  
-      where category!='EVENT_CREATED'
+      where category='READ' or category='APPLICATION'
       AND created_at>? 
       group by source_id 
       order by num DESC LIMIT 3;`,
       [startTimestamp]
     );
-    console.log("-->", events);
     conn.end();
 
     return events;

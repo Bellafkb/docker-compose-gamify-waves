@@ -5,12 +5,15 @@ const { saveLocation } = require("../service/locationService");
 const { saveDescription } = require("../service/descriptionService");
 const { getEntriesByTableName } = require("../service/abstractService");
 const { fetchUserById } = require("../service/usersService");
+const { connect } = require("../config/connectMysql");
+const { publish } = require("../service/publisherService");
+const { ACTIONS, REDIS_CHANNELS } = require("../helper");
 
 // @desc get all poolevents
 // @route GET /api/v1/poolevent
 // @access Public
 //TODO: pagination + sorting
-exports.getPoolEvents = (req, res, next) => {
+exports.getPoolEvents = async (req, res, next) => {
   let filter = "";
   let { limit, type, region, state, start, page } = req.query;
   if (!limit) {
@@ -34,13 +37,15 @@ exports.getPoolEvents = (req, res, next) => {
   if (region) {
     filter += ` AND l.locality="${region}"`;
   }
-
+  // @desc get poolevent by id
+  // @route GET /api/v1/poolevent/:id
+  // @access Public
   if (start) {
     filter += ` AND monthname(p.event_start)="${start}"`;
   }
 
   const sql = `SELECT 
-  p.id, 
+  p.idevent, 
   p.name,
   p.supporter_lim, 
   p.event_start,
@@ -53,26 +58,29 @@ exports.getPoolEvents = (req, res, next) => {
   l.postal_code,
   pt.name as type_name
   FROM poolevents p 
-  JOIN locations l ON l.poolevent_id=p.id JOIN poolevent_types pt ON p.idevent_type=pt.idevent_type
-  WHERE ${filter} LIMIT ${limit} OFFSET ${limit * page};`;
-  global.conn.query(sql, (error, poolevents) => {
+  JOIN locations l ON l.poolevent_id=p.idevent 
+  JOIN poolevent_types pt 
+  ON p.idevent_type=pt.idevent_type
+  WHERE ${filter} 
+  LIMIT ${limit} 
+  OFFSET ${limit * page};`;
+  req.conn.query(sql, (error, poolevents) => {
     if (error) {
-      res.status(400).json({
-        success: false,
-        message: error.message
-      });
+      req.error = error;
+      return next();
     }
     getEntriesByTableName("poolevents", (error, entriesCount) => {
       if (error) {
-        return res.status(500).json({ success: false, message: error.message });
+        req.error = error;
+        return next();
       }
-      res.status(200).json({
-        success: true,
-        data: poolevents,
+      req.data = {
+        poolevents,
         count: +entriesCount[0].count,
         page: +page,
         size: +limit
-      });
+      };
+      next();
     });
   });
 };
@@ -80,20 +88,18 @@ exports.getPoolEvents = (req, res, next) => {
 // @desc get poolevent by id
 // @route GET /api/v1/poolevent/:id
 // @access Public
-exports.getPoolEventById = (req, res) => {
+exports.getPoolEventById = (req, res, next) => {
   const { id } = req.params;
   const sql = `SELECT *,pt.name as type_name, pt.idevent_type, 
               p.name as event_name FROM poolevents AS p  
-              LEFT JOIN locations l ON p.id=l.poolevent_id 
-              LEFT JOIN descriptions d ON d.poolevent_id=p.id
+              LEFT JOIN locations l ON p.idevent=l.poolevent_id 
+              LEFT JOIN descriptions d ON d.poolevent_id=p.idevent
               LEFT JOIN poolevent_types pt ON pt.idevent_type=p.idevent_type
-              WHERE p.id=${id};`;
-  global.conn.query(sql, (err, poolevent) => {
+              WHERE p.idevent='${id}';`;
+  req.conn.query(sql, (err, poolevent) => {
     if (err) {
-      res.status(400).json({
-        success: false,
-        message: `Error in getPoolEventById: ${err.message}`
-      });
+      req.error = err
+      next()
     } else {
       if (poolevent.length > 0) {
         const {
@@ -125,15 +131,13 @@ exports.getPoolEventById = (req, res) => {
 
         fetchUserById(asp_event_id, (error, asp_event_id) => {
           if (error) {
-            return res
-              .status(400)
-              .json({ success: false, message: error.message });
+            req.error = error;
+            return next();
           }
           fetchUserById(user_id, (error, user) => {
             if (error) {
-              return res
-                .status(400)
-                .json({ success: false, message: error.message });
+              req.error = error;
+              next();
             }
             let crew = "";
             if (user) {
@@ -175,7 +179,7 @@ exports.getPoolEventById = (req, res) => {
           });
         });
       } else {
-        res.status(400).json({ success: false, error: "Poolevent not found" });
+        next();
       }
     }
   });
@@ -184,7 +188,7 @@ exports.getPoolEventById = (req, res) => {
 // @desc  create poolevent
 // @route POST /api/v1/poolevent
 // @access Private
-exports.postPoolEvent = (req, res) => {
+exports.postPoolEvent = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -193,47 +197,35 @@ exports.postPoolEvent = (req, res) => {
     });
   }
   const { front, location, description } = req.body;
-  front.user_id = req.user.id;
-  savePoolevent(front, (error, pooleventResp) => {
+  //front.user_id = req.user.id
+
+  front.user_id = "4a74141e-c2c0-46a0-9c0c-84bef8be7d0f";
+  savePoolevent(front, (error, { idevent }) => {
     if (error) {
       res.status(400).json({
         message: error.message
       });
     }
-    location.poolevent_id = pooleventResp.insertId;
+    location.poolevent_id = idevent;
     saveLocation(location, (error, locationResp) => {
       if (error) {
-        res.status(400).json({
-          message: error
-        });
+        next();
       }
-      description.poolevent_id = pooleventResp.insertId;
+      description.poolevent_id = idevent;
       saveDescription(description, (error, descriptionResp) => {
         if (error) {
           res.status(400).json({ message: error.message });
         }
-        saveNotification("poolevents", pooleventResp.insertId, error => {
-          if (error) {
-            res.status(400).json({ message: error.message });
-          }
-          checkChallengeComplete(
-            "poolevents",
-            req.user.id,
-            (error, progress) => {
-              if (error) {
-                res
-                  .status(400)
-                  .json({ success: false, message: error.message });
-              }
-              global.em.emit("NEW_POOLEVENT", pooleventResp.insertId);
-
-              res.status(200).json({
-                location: locationResp,
-                poolevent: pooleventResp,
-                description: descriptionResp
-              });
-            }
-          );
+        publish(
+          REDIS_CHANNELS.WAVES,
+          ACTIONS.EVENT_CREATED,
+          front.user_id,
+          idevent
+        );
+        res.status(200).json({
+          location: locationResp,
+          poolevent: idevent,
+          description: descriptionResp
         });
       });
     });
@@ -288,88 +280,77 @@ exports.deletePoolEvent = (req, res) => {
 // @desc edit poolevent by id
 // @route PUT /api/v1/poolevent/:id
 // @access Private
-exports.putPoolEvent = (req, res) => {
+exports.putPoolEvent = async (req, res) => {
+  const conn = await connect();
+  req.conn = conn;
   const { body } = req;
   const { id } = req.params;
-  global.conn.query(
+  conn.query(
     `UPDATE poolevents SET ? WHERE id =${id};`,
     body.front,
     (error, resp) => {
       if (error) {
-        res.status(400).json({
-          success: false,
-          message: `Error in putPoolEvent: ${error.message}`
-        });
+        req.error = error;
+        next();
       } else {
         if (body.location) {
-          global.conn.query(
+          conn.query(
             `UPDATE locations set ? where poolevent_id=${id}`,
             body.location,
             (error, response) => {
               if (error) {
-                res.status(400).json({
-                  success: false,
-                  message: `Error in putPoolEvent: ${error.message}`
-                });
+                req.error = error;
+                next();
               }
             }
           );
           if (body.description) {
-            global.conn.query(
+            conn.query(
               `UPDATE descriptions set ? where poolevent_id=${id}`,
               body.description,
               (error, response) => {
                 if (error) {
-                  res.status(400).json({
-                    success: false,
-                    message: `Error in putPoolEvent: ${error.message}`
-                  });
+                  req.error = error;
+                  next();
                 }
-                res.status(200).json({
-                  success: true,
-                  data: response
-                });
+                req.data = response;
+                next();
               }
             );
           } else {
-            res.status(200).json({
-              success: true,
-              data: response
-            });
+            req.data = response;
+            next();
           }
         } else if (body.description) {
-          global.conn.query(
+          conn.query(
             `UPDATE descriptions set ? where poolevent_id=${id}`,
             body.description,
             (error, response) => {
               if (error) {
-                res.status(400).json({
-                  success: false,
-                  message: `Error in putPoolEvent: ${error.message}`
-                });
+                req.error = error;
+                next();
               }
             }
           );
         } else {
-          res.status(200).json({
-            success: true,
-            data: resp
-          });
+          req.data = resp;
+          next();
         }
       }
     }
   );
 };
 
-// @desc edit poolevent by id
-// @route PUT /api/v1/poolevent/:id
-// @access Private
-exports.getPoolEventByUserId = (req, res) => {
+// @desc get poolevent by id
+// @route GET /api/v1/poolevent/:id
+// @access Public
+exports.getPoolEventByUserId = async (req, res, next) => {
   const { id } = req.user;
-
-  global.conn.query(
+  const conn = await connect();
+  req.conn = conn;
+  conn.query(
     `SELECT 
-    p.id, 
+    p.idevent, 
     p.name,
     p.event_start,
     p.event_end,
@@ -386,38 +367,31 @@ exports.getPoolEventByUserId = (req, res) => {
     WHERE user_id='${id}';`,
     (error, resp) => {
       if (error) {
-        res.status(400).json({
-          success: false,
-          message: `Error in putPoolEvent: ${error.message}`
-        });
+        req.error = error;
+        next();
       } else {
-        res.status(200).json({
-          success: true,
-          data: resp
-        });
+        req.data = resp;
+        next();
       }
     }
   );
 };
 
-//TODO:
 // @desc edit poolevent by id
 // @route PUT /api/v1/poolevent/:id
 // @access Private
-exports.getSoonStartingEvents = (req, res) => {
-  global.conn.query(
+exports.getSoonStartingEvents = async (req, res, next) => {
+  const conn = await connect();
+  req.conn = conn;
+  conn.query(
     `select * from poolevents p order by event_start;`,
     (error, resp) => {
       if (error) {
-        res.status(400).json({
-          success: false,
-          message: `Error in putPoolEvent: ${error.message}`
-        });
+        req.error = error;
+        next();
       } else {
-        res.status(200).json({
-          success: true,
-          data: resp
-        });
+        req.data = resp;
+        next();
       }
     }
   );

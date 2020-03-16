@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
-const base = "/gamify";
+const base = "/backend/gamify";
 app.use(base, route);
 app.use(base + "/achievement", achievementRouter);
 app.use(base + "/leaderboard", crewRanking);

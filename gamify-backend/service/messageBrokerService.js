@@ -10,7 +10,7 @@ exports.handleMessage = async (category, userId, sourceId) => {
   try {
     const { id, name } = await fetchCrewByUserId(userId);
 
-    if (!(await isNewUser(userId))) {
+    if ((await isNewUser(userId))) {
       await createUser(userId, id);
       await initNewUserAchievement(userId);
     }
@@ -19,7 +19,7 @@ exports.handleMessage = async (category, userId, sourceId) => {
       await createCrew(id, name);
       await createLeaderboardEntry(id);
     }
-    //todo add crewid--> id = crewId
+    //id = crewId
     await handleAction(category, userId, sourceId, id);
     return true;
   } catch (error) {

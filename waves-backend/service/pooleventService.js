@@ -1,6 +1,5 @@
 const { generateUuid } = require("../helper");
 const { connect } = require("../config/connectMysql");
-const { publish } = require("../service/publisherService");
 
 exports.getNumOfPeByUserId = (userId, callback) => {
   try {
@@ -21,50 +20,25 @@ exports.getNumOfPeByUserId = (userId, callback) => {
 };
 
 exports.savePoolevent = async (
-  name,
-  event_start,
-  event_end,
-  application_start,
-  application_end,
-  asp_event_id,
-  website,
-  supporter_lim,
-  active_user_only,
-  user_id,
-  crew_id,
-  idevent_type,
+  frontData,
   callback
 ) => {
   const conn = await connect();
   const idevent = generateUuid();
-  const event = {
-    idevent,
-    name,
-    event_start,
-    event_end,
-    application_start,
-    application_end,
-    asp_event_id,
-    website,
-    supporter_lim,
-    active_user_only,
-    user_id,
-    crew_id,
-    idevent_type,
-    crew_id
-  };
+  frontData.idevent = idevent;
   try {
     const sql = "INSERT INTO poolevents SET ?;";
-    conn.query(sql, event, (error, resp) => {
+    conn.query(sql, frontData, (error, resp) => {
       if (!error) {
         conn.end();
-        publish("WAVES", "EVENT_CREATED", user_id, idevent);
-        callback(null, event);
+        callback(null, frontData);
       } else {
+        conn.end();
         callback(error);
       }
     });
   } catch (error) {
+    conn.end();
     callback(error);
   }
 };

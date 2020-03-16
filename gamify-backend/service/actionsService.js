@@ -12,9 +12,6 @@ exports.createAction = async (name, points, type) => {
       [timestamp, name, points, type]
     );
     conn.end()
-    conn.release()
-    conn.destroy()
-
     return {
       created_at: timestamp,
       id_action: name,
@@ -34,8 +31,6 @@ exports.getActionById = async action => {
       action
     );
     await conn.end()
-    await conn.destroy()
-
     return dbaction;
   } catch (error) {
     throw error;
@@ -47,7 +42,6 @@ exports.getActions = async () => {
     const conn = await connectToDb();
     const dbaction = await conn.query("SELECT * FROM actions");
     await conn.end()
-    await conn.destroy()
     return dbaction;
   } catch (error) {
     throw error;

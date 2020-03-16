@@ -2,6 +2,8 @@ const router = require("express").Router();
 const { verify } = require("../middleware/tokenChecker");
 const { checkAccessControl } = require("../middleware/accessControlChecker");
 const { check } = require("express-validator");
+const { handleResponse } = require("../middleware/handleResponse");
+const { iniDbConnection } = require("../middleware/initDbConnection");
 
 const {
   deleteComment,
@@ -17,10 +19,14 @@ router.route("/").post(
     .not()
     .isEmpty()
     .isString(),
-  postComment
+  iniDbConnection,
+  postComment,
+  handleResponse
 ); //private
 
-router.route("/:pooleventId").get(getCommentsByPooleventId);
+router
+  .route("/poolevent/:id")
+  .get(iniDbConnection, getCommentsByPooleventId, handleResponse);
 
 router
   .route("/:id")

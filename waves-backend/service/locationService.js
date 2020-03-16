@@ -1,9 +1,15 @@
-exports.saveLocation = (location, callback) => {
+const {connect} = require("../config/connectMysql")
+const {generateUuid} = require("../helper")
+
+exports.saveLocation = async (location, callback) => {
   try {
+    const conn = await connect()
+    const uuid = generateUuid()
+    location.id= uuid
     const sql = "INSERT INTO locations SET ?;";
-    global.conn.query(sql, location, (error, resp) => {
+    conn.query(sql, location, (error, resp) => {
       if (!error) {
-        callback(null, resp);
+        callback(null, location);
       } else {
         callback(error);
       }

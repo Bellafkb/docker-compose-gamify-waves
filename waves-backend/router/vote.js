@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const { check } = require("express-validator");
+const { iniDbConnection } = require("../middleware/initDbConnection");
+const { handleResponse } = require("../middleware/handleResponse");
 
 const {
   deletevote,
@@ -9,7 +11,9 @@ const {
 
 const { verify } = require("../middleware/tokenChecker");
 
-router.route("/:comment_id").get(getvoteByCommentId);
+router
+  .route("/:comment_id")
+  .get(iniDbConnection, getvoteByCommentId, handleResponse);
 
 router.route("/").post(
   verify,
@@ -17,9 +21,13 @@ router.route("/").post(
     .not()
     .isEmpty()
     .isNumeric(),
-  postvote
+  iniDbConnection,
+  postvote,
+  handleResponse
 ); //private
 
-router.route("/:id").delete(verify, deletevote); //private
+router
+  .route("/:id")
+  .delete(verify, iniDbConnection, deletevote, handleResponse); //private
 
 module.exports = router;

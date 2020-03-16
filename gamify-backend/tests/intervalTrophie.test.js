@@ -4,7 +4,6 @@ const {
 } = require("../service/intervalTrophieService");
 const { generateUuid } = require("../helper");
 
-const uuid = generateUuid();
 
 test("get todays events", async () => {
   const events = await getTodaysCreatedEvents();

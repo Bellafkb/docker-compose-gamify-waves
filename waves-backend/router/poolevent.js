@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const { check } = require("express-validator");
 const { verify, verifyX } = require("../middleware/tokenChecker");
+const { handleResponse } = require("../middleware/handleResponse");
+const { iniDbConnection } = require("../middleware/initDbConnection");
+
 const {
   checkAccessControl,
   pooleventAccessControl
@@ -17,10 +20,10 @@ const {
 
 router
   .route("/")
-  .get(getPoolEvents)
+  .get(iniDbConnection, getPoolEvents, handleResponse)
   .post(
-    verifyX,
-    pooleventAccessControl,
+    //verifyX,
+    //pooleventAccessControl,
     [
       check("front.name")
         .not()
@@ -62,17 +65,19 @@ router
       check("description.text").isString(),
       check("description.html").isString()
     ],
-    postPoolEvent
+    postPoolEvent,
+    handleResponse
   );
 
 router
   .route("/:id")
-  .get(getPoolEventById)
-  .put(verifyX, pooleventAccessControl, putPoolEvent)
+  .get(iniDbConnection, getPoolEventById, handleResponse)
+  .put(verifyX, pooleventAccessControl, putPoolEvent, handleResponse)
   .delete(
     verify,
     checkAccessControl("updateAny", "poolevent"),
-    deletePoolEvent
+    deletePoolEvent,
+    handleResponse
   );
 
 router.route("/user/me").get(verifyX, getPoolEventByUserId); //private

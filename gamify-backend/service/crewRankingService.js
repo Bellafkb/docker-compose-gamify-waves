@@ -11,10 +11,11 @@ exports.getCrewLeaderboard = async () => {
   try {
     const conn = await connectToDb();
     const leaderboard = await conn.query(
-      "select * from crew_leaderboard"
+      `select name, score from crew_leaderboard cl
+      join crews crs on crs.idcrew=cl.crew_id
+      order by score desc limit 10`
     );
-    conn.end()
-    conn.destroy()
+    conn.end();
 
     return leaderboard;
   } catch (error) {
@@ -30,8 +31,7 @@ exports.createLeaderboardEntry = async crewId => {
       "INSERT INTO crew_leaderboard value (?,?,?,?,?)",
       [generateUuid(), crewId, 0, timestamp, timestamp]
     );
-    conn.end()
-    conn.destroy()
+    conn.end();
 
     return leaderboard;
   } catch (error) {
@@ -47,8 +47,7 @@ exports.incrementLeaderBoardEntryByCrewId = async (crewId, score) => {
       updated_at=? WHERE crew_id='${crewId}'`,
       [score, getDateNow()]
     );
-    conn.end()
-    conn.destroy()
+    conn.end();
 
     return leaderboard;
   } catch (error) {
@@ -67,11 +66,9 @@ exports.handleAction = async (category, userId, sourceId, crewId) => {
 
         return true;
       } else {
-
         return false;
       }
     } else {
-
       return false;
     }
   } catch (error) {

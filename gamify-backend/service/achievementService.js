@@ -11,12 +11,15 @@ const { connectToDb } = require("../config/connectMysql");
 exports.fetchAchievements = async () => {
   try {
     const conn = await connectToDb();
-    const achievements = await conn.query(`select * from achievements a 
+    const achievements = await conn.query(`select 
+    c.type, 
+    c.points, 
+    b.img_url, 
+    b.desc 
+    from achievements a 
     left join challenges c on a.challenge_id =c.idchallenge 
     left join badges b on b.idbadge =a.badge_id;`);
     conn.end();
-    conn.destroy()
-
     return achievements;
   } catch (error) {
     throw error;
@@ -37,8 +40,7 @@ exports.createAchievement = async (name, desc, type, img_url, points) => {
       challenge.idchallenge
     ]);
     this.initNewAchievementForUsers(challenge.idchallenge);
-    conn.end()
-    conn.destroy()
+    conn.end();
     return {
       badge,
       challenge,

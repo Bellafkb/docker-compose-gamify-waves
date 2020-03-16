@@ -143,6 +143,8 @@ exports.fetchToken = async code => {
     const { data } = await axios.get(
       `${process.env.OAUTH_BASE_URI}/drops/oauth2/access_token?grant_type=authorization_code&client_id=${process.env.CLIENT_ID}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}`
     );
+      console.log(      `${process.env.OAUTH_BASE_URI}/drops/oauth2/access_token?grant_type=authorization_code&client_id=${process.env.CLIENT_ID}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}`
+      );
     return data;
   } catch (error) {
     throw error;
@@ -155,7 +157,7 @@ exports.fetchProfile = async access_token => {
       `${process.env.OAUTH_BASE_URI}/drops/oauth2/rest/profile?access_token=${access_token}`
     );
     const user = await axios.post(
-      `${process.env.OAUTH_BASE_URI}/drops/rest/user/${data.id}?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}`,
+        `${process.env.OAUTH_BASE_URI}/drops/rest/user/${data.id}?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}`,
       {}
     );
     return user.data;

@@ -2,22 +2,17 @@ const { saveVote } = require("../service/voteService");
 // @desc get vote by id
 // @route GET /api/v1/vote/:id
 // @access Public
-exports.getvoteByCommentId = (req, res) => {
+exports.getvoteByCommentId = (req, res,next) => {
   const { comment_id } = req.params;
-
-  global.conn.query(
+  req.conn.query(
     `SELECT * FROM votes p WHERE p.comment_id='${comment_id}'`,
     (err, votes) => {
       if (err) {
-        res.status(400).json({
-          success: false,
-          message: `Error in getvoteId: ${err.message}`
-        });
+        req.error= err
+        next()
       } else {
-        res.status(200).json({
-          success: true,
-          data: votes
-        });
+        req.data = votes
+        next()
       }
     }
   );
@@ -27,7 +22,7 @@ exports.getvoteByCommentId = (req, res) => {
 // @route POST /api/v1/vote
 // @access Private
 exports.postvote = (req, res) => {
-  const { user_id, comment_id } = req.body;
+  const { comment_id } = req.body;
   const { id } = req.user;
   const user_id = id;
 

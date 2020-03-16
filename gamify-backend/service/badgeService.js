@@ -16,7 +16,6 @@ exports.createBadge = async (name, desc, type, img_url) => {
       img_url
     ]);
     conn.end()
-    conn.destroy()
     return {
       idbadge: uuid,
       name,

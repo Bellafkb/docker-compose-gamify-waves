@@ -9,7 +9,6 @@ exports.getAllUsers = async () => {
     const conn = await connectToDb()
     const users = await conn.query("SELECT u.iduser FROM users AS u;");
     conn.end()
-    conn.destroy()
     return users;
   } catch (error) {
     throw error;
@@ -23,8 +22,7 @@ exports.isNewUser = async userId => {
       userId
     ]);
     await conn.end()
-    await conn.destroy()
-    return user.length > 0;
+    return user.length == 0;
   } catch (error) {
     throw error;
   }

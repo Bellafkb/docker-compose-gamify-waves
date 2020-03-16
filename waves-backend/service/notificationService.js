@@ -28,7 +28,6 @@ exports.saveNotification = (type, source_id, callback) => {
             },
             (error, resp) => {
               if (error) {
-                console.log("-->", error.message);
 
                 callback(error);
               }
@@ -107,7 +106,6 @@ exports.sendNewBadge = (data, callback) => {
   }
   
 };
-//'PE_RELEASED', 'PE_CANCELLED', 'NEW_COMMENT', 'NEW_VOTE', 'APPLICATION_REJECTED', 'APPLICATION_ACCEPETED', 'UNLOCKED_ACHIEVEMENT', 'NEW_ACHIEVEMENT_ADDED'
 exports.getTableNameByNotificationType = type => {
   switch (type) {
     case "comm":

@@ -8,7 +8,6 @@ const route = require("./router");
 const dotenv = require("dotenv");
 const cors = require("cors");
 
-
 const poolevent = require("./router/poolevent");
 const application = require("./router/application");
 const comment = require("./router/comment");
@@ -28,30 +27,27 @@ var server = require("http").Server(app);
 
 app.use(morgan);
 
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
-
-app.use("/", route);
-app.use("/waves/api/v1/poolevent", poolevent);
-app.use("/waves/api/v1/application", application);
-app.use("/waves/api/v1/vote", vote);
-app.use("/waves/api/v1/comment", comment);
-app.use("/waves/api/v1/notification", notification);
-app.use("/waves/api/v1/favorite", favorite);
-app.use("/waves/api/v1/user", user);
-app.use("/waves/api/v1/eventtype", eventtype);
-app.use("/waves/api/v1/month", month);
+const base = "/backend/waves/api/v1";
+app.use(base, route);
+app.use(base + "/poolevent", poolevent);
+app.use(base + "/application", application);
+app.use(base + "/vote", vote);
+app.use(base + "/comment", comment);
+app.use(base + "/notification", notification);
+app.use(base + "/favorite", favorite);
+app.use(base + "/user", user);
+app.use(base + "/eventtype", eventtype);
+app.use(base + "/month", month);
 
 app.use((req, res, callback) => {
   const error = new Error("not found");
   error.status = 404;
   callback(error);
 });
-
-
 
 app.use((error, req, res, callback) => {
   res
@@ -62,7 +58,5 @@ app.use((error, req, res, callback) => {
 const port = 4000;
 
 server.listen(port, () => {
-  console.log(
-    `App running in ${port} mode on port ${port}`.green.bold
-  );
+  console.log(`App running in ${port} mode on port ${port}`.green.bold);
 });
