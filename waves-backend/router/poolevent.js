@@ -20,10 +20,8 @@ const {
 
 router
   .route("/")
-  .get(iniDbConnection, getPoolEvents, handleResponse)
+  .get(verify,iniDbConnection, getPoolEvents, handleResponse)
   .post(
-    //verifyX,
-    //pooleventAccessControl,
     [
       check("front.name")
         .not()
@@ -72,7 +70,7 @@ router
 router
   .route("/:id")
   .get(iniDbConnection, getPoolEventById, handleResponse)
-  .put(verifyX, pooleventAccessControl, putPoolEvent, handleResponse)
+  .put(verify, pooleventAccessControl, putPoolEvent, handleResponse)
   .delete(
     verify,
     checkAccessControl("updateAny", "poolevent"),
@@ -80,6 +78,6 @@ router
     handleResponse
   );
 
-router.route("/user/me").get(verifyX, getPoolEventByUserId); //private
+router.route("/user/me").get(verify, getPoolEventByUserId); //private
 
 module.exports = router;

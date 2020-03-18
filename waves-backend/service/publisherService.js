@@ -17,6 +17,7 @@ exports.publish = async (channel, action, userId, sourceId) => {
         sourceId
       })
     );
+    redis_client.end()
   } catch (error) {
     throw error;
   }

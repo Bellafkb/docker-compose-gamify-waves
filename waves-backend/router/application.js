@@ -18,7 +18,7 @@ const {
 } = require("../controller/applicationController");
 
 router.route("/").post(
-  verifyX,
+  verify,
   [
     check("text").isString(),
     check("poolevent_id")
@@ -34,7 +34,7 @@ router.route("/").post(
 router
   .route("/:id")
   .put(
-    verifyX,
+    verify,
     applicationAccessControl,
     iniDbConnection,
     putApplication,
@@ -45,7 +45,7 @@ router
 router
   .route("/poolevent/:id")
   .get(
-    verifyX,
+    verify,
     pooleventAccessControl,
     iniDbConnection,
     getApplicationsEvent,

@@ -143,8 +143,9 @@ exports.fetchToken = async code => {
     const { data } = await axios.get(
       `${process.env.OAUTH_BASE_URI}/drops/oauth2/access_token?grant_type=authorization_code&client_id=${process.env.CLIENT_ID}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}`
     );
-      console.log(      `${process.env.OAUTH_BASE_URI}/drops/oauth2/access_token?grant_type=authorization_code&client_id=${process.env.CLIENT_ID}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}`
-      );
+    console.log(
+      `${process.env.OAUTH_BASE_URI}/drops/oauth2/access_token?grant_type=authorization_code&client_id=${process.env.CLIENT_ID}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}`
+    );
     return data;
   } catch (error) {
     throw error;
@@ -157,10 +158,34 @@ exports.fetchProfile = async access_token => {
       `${process.env.OAUTH_BASE_URI}/drops/oauth2/rest/profile?access_token=${access_token}`
     );
     const user = await axios.post(
-        `${process.env.OAUTH_BASE_URI}/drops/rest/user/${data.id}?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}`,
+      `${process.env.OAUTH_BASE_URI}/drops/rest/user/${data.id}?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}`,
       {}
     );
-    return user.data;
+
+    const { id: userId, profiles, roles: supporterRoles } = user.data;
+    const [firstRole, secondRole] = supporterRoles;
+    const { supporter } = profiles[0];
+    const { confirmed } = profiles[0];
+    const { firstName, lastName, fullName, crew, roles } = supporter;
+    const { id: crewId, name: crewName } = crew;
+    const { name: crewRoleName } = roles[0];
+
+    return {
+      userId,
+      confirmed,
+      firstName,
+      lastName,
+      fullName,
+      crew: {
+        crewId,
+        crewName
+      },
+      roles: {
+        crewRoleName,
+        firstRole,
+        secondRole
+      }
+    };
   } catch (error) {
     throw error;
   }

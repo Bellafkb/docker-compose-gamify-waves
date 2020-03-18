@@ -3,7 +3,7 @@ const { getRegions } = require("../controller/regionController");
 const { getAllMonths } = require("../controller/monthController");
 const { authenticate } = require("../controller/oauthController");
 const { getInformation } = require("../controller/infoController");
-const { verify, verifyX } = require("../middleware/tokenChecker");
+const { verify} = require("../middleware/tokenChecker");
 const { pooleventAccessControl } = require("../middleware/accessControlChecker");
 const { getApplicationsUser } = require("../controller/applicationController");
 
@@ -22,6 +22,6 @@ router.route("/onboarding").get(getApplicationsUser);
 
 router.route("/oauth").get(authenticate);
 
-router.route("/info").get(verifyX, pooleventAccessControl, getInformation);
+router.route("/info").get(verify, pooleventAccessControl, getInformation);
 
 module.exports = router;
