@@ -47,3 +47,15 @@ exports.getActions = async () => {
     throw error;
   }
 };
+
+exports.queryAcionsTypes = async ()=>{
+  try {
+    console.log("scoop");
+    const conn = await connectToDb();
+    const dbaction = await conn.query("SELECT a.type FROM actions a");
+    await conn.end()
+    return dbaction;
+  } catch (error) {
+    throw error
+  }
+}

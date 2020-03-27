@@ -2,7 +2,8 @@ const router = require("express").Router();
 const { check } = require("express-validator");
 const {
   postAchievement,
-  getAchievements
+  getAchievements,
+  
 } = require("../controller/achievementController");
 
 router
@@ -19,12 +20,6 @@ router
       check("badge.img_url")
         .notEmpty()
         .isString(),
-      check("challenge.points")
-        .notEmpty()
-        .isString(),
-      check("challenge.type")
-        .notEmpty()
-        .isString()
     ],
     postAchievement
   );

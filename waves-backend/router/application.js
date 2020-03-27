@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { verify, verifyX } = require("../middleware/tokenChecker");
+const { verify } = require("../middleware/tokenChecker");
 const { handleResponse } = require("../middleware/handleResponse");
 const { iniDbConnection } = require("../middleware/initDbConnection");
 
@@ -44,13 +44,7 @@ router
 
 router
   .route("/poolevent/:id")
-  .get(
-    verify,
-    pooleventAccessControl,
-    iniDbConnection,
-    getApplicationsEvent,
-    handleResponse
-  );
+  .get(verify, iniDbConnection, getApplicationsEvent, handleResponse);
 
 router
   .route("/user")

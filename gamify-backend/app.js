@@ -6,14 +6,15 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan")("dev");
 const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
 const {
   achievementRouter,
   route,
   crewRanking,
-  actionsRouter
+  actionsRouter,
+  progressRouter
 } = require("./router");
-const dotenv = require("dotenv");
-const cors = require("cors");
 
 require("colors");
 
@@ -34,6 +35,7 @@ app.use(base, route);
 app.use(base + "/achievement", achievementRouter);
 app.use(base + "/leaderboard", crewRanking);
 app.use(base + "/action", actionsRouter);
+app.use(base + "/progress", progressRouter);
 
 app.use((req, res, callback) => {
   const error = new Error("not found");

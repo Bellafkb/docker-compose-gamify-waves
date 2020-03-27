@@ -1,4 +1,4 @@
-const { getActions, createAction } = require("../service/actionsService");
+const { getActions, createAction ,queryAcionsTypes} = require("../service/actionsService");
 
 exports.getAcions = async (req, res) => {
   try {
@@ -10,7 +10,7 @@ exports.getAcions = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message  
     });
   }
 };
@@ -28,5 +28,16 @@ exports.postActions = async (req, res) => {
       success: false,
       message: error.message
     });
+  }
+};
+
+exports.getAcionsTypes = async (req, res, next) => {
+  try {
+    const types = await queryAcionsTypes();
+    req.data = types;
+    next();
+  } catch (error) {
+    req.error = error;
+    next();
   }
 };

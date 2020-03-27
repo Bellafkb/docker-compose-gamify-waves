@@ -2,6 +2,8 @@ const route = require("express").Router();
 const crewRanking = require("./crewRankingRouter");
 const achievementRouter = require("./achievementRouter");
 const actionsRouter = require("./actionRouter");
+const progressRouter = require("./progressRouter");
+
 
 
 route.get("/", async (req, res) => {
@@ -25,5 +27,6 @@ module.exports = {
   route,
   crewRanking,
   achievementRouter,
-  actionsRouter
+  actionsRouter,
+  progressRouter
 };

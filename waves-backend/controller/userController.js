@@ -1,19 +1,21 @@
 const axios = require("axios");
+const { fetchAllUsers } = require("../service/usersService");
 
-exports.getAllUsers = (req, res) => {
-  global.conn.query(`SELECT u.id, u.last_name FROM users u;`, (err, users) => {
-    if (err) {
-      res.status(400).json({
-        success: false,
-        message: `Error in getvoteId: ${err.message}`
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        data: users
-      });
-    }
-  });
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await fetchAllUsers();
+    let response = users.map(({ id, profiles }) => {
+      return {
+        userId: id,
+        fullName: profiles[0] ? profiles[0].supporter.fullName : "ERROR"
+      };
+    });
+    req.data = response;
+    next();
+  } catch (error) {
+    req.error = error;
+    next();
+  }
 };
 
 exports.fetchUserById = async (req, res) => {

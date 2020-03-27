@@ -7,6 +7,7 @@ exports.verify = async (req, res, next) => {
     const { authorization } = req.headers;
     if (authorization) {
       const [bearer, token] = await authorization.split(" ");
+      console.log(token);
       if (token === null) {
         res.status(401).json({
           success: false,
@@ -16,10 +17,16 @@ exports.verify = async (req, res, next) => {
       const { userId } = jwt.decode(token, "secret");
       console.log(userId);
       getUserAccessToken(userId, async (error, access_token) => {
-        console.log("-->", access_token);
+        if (error) {
+          res.status(401).json({
+            success: false,
+            error: error.message
+          });
+        }
         const profile = await fetchProfile(access_token);
+        console.log(profile);
         req.user = profile;
-        return next(null, profile);
+        next(null, profile);
       });
     } else {
       res.status(401).json({

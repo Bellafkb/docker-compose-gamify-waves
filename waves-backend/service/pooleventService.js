@@ -43,10 +43,12 @@ exports.savePoolevent = async (
   }
 };
 
-exports.incrementFaveCount = (id, callback) => {
+exports.incrementFaveCount = async (id, callback) => {
   try {
-    const sql = "UPDATE poolevents SET fave_count=fave_count+1 WHERE id=?;";
-    global.conn.query(sql, id, (error, resp) => {
+    const conn = await connect()
+    const sql = "UPDATE poolevents SET fave_count=fave_count+1 WHERE idevent=?;";
+    conn.query(sql, id, (error, resp) => {
+      conn.end()
       if (!error) {
         callback(null, resp);
       } else {

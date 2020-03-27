@@ -5,6 +5,7 @@ console.log(`cache redis connected to port ${port_redis}`);
 
 exports.publish = async (channel, action, userId, sourceId) => {
   try {
+    console.log(channel, action, userId, sourceId);
     const redis_client = await redis.createClient({
       host: "redis",
       port: port_redis
@@ -17,7 +18,6 @@ exports.publish = async (channel, action, userId, sourceId) => {
         sourceId
       })
     );
-    redis_client.end()
   } catch (error) {
     throw error;
   }

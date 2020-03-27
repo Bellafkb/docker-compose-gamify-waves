@@ -7,25 +7,54 @@ const { ACTIONS, REDIS_CHANNELS } = require("../helper");
 // @route GET /api/v1/comment/:id
 // @access Public
 exports.getCommentsByPooleventId = async (req, res, next) => {
-  const conn = await connect();
-  req.conn = conn;
   const { id } = req.params;
 
-  const sql = `SELECT c.text, c.idcomment, c.created_at, 
-              c.user_id,u.full_name, u.first_name,u.last_name 
+  const sql = `SELECT c.idcomment, 
+              c.text, 
+              c.user_id,
+              c.poolevent_id, 
+              c.created_at 
               FROM comments c 
-              JOIN users u ON c.user_id=u.id  
+              JOIN users u ON c.user_id=u.id
               WHERE c.poolevent_id='${id}' 
               order by c.created_at desc;`;
-  conn.query(sql, (err, comment) => {
+  req.conn.query(sql, async (err, comments) => {
     if (err) {
       req.error = err;
-      next();
     } else {
-      req.data = comment;
-      next();
+      resolveVotes(comments, (err, result) => {
+        if (err) {
+          req.error = err;
+        }
+        req.data = result;
+        next();
+      });
     }
   });
+};
+
+const resolveVotes = async (comments, callback) => {
+  try {
+    const conn = await connect();
+    comments.map((comment, i) => {
+      conn.query(
+        "select * from votes where comment_id=?",
+        comment.idcomment,
+        (error, votes) => {
+          if (error) {
+            callback(error);
+          }
+          comment.votes = votes || [];
+          if (comments.length - 1 == i) {
+            conn.end();
+            callback(null, comments);
+          }
+        }
+      );
+    });
+  } catch (error) {
+    callback(error);
+  }
 };
 
 // @desc  create comment
@@ -34,11 +63,10 @@ exports.getCommentsByPooleventId = async (req, res, next) => {
 exports.postComment = async (req, res) => {
   try {
     const { body } = req;
-    const { id } = req.user;
-    body.user_id = id;
-    const comment = await saveComment(body.text, body.userId, body.pId);
-    publish(REDIS_CHANNELS.WAVES, ACTIONS.COMMENT, id, comment.idcomment);
-    res.status(200).json({ success: true, data: comment });
+    const { userId } = req.user;
+    body.user_id = userId;
+    await saveComment(body.text, body.user_id, body.pId);
+    res.status(200).json({ success: true });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

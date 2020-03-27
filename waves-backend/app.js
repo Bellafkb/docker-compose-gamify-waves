@@ -15,7 +15,6 @@ const vote = require("./router/vote");
 const notification = require("./router/notification");
 const eventtype = require("./router/pooleventType");
 const favorite = require("./router/favorite");
-const month = require("./router/month");
 const user = require("./router/user");
 
 require("colors");
@@ -41,7 +40,6 @@ app.use(base + "/notification", notification);
 app.use(base + "/favorite", favorite);
 app.use(base + "/user", user);
 app.use(base + "/eventtype", eventtype);
-app.use(base + "/month", month);
 
 app.use((req, res, callback) => {
   const error = new Error("not found");

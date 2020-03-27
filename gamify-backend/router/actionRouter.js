@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const { check } = require("express-validator");
 const {
-    getAcions,
-    postActions
+  getAcions,
+  postActions,
 } = require("../controller/actionController");
+
+
 
 router
   .route("/")
@@ -22,5 +24,6 @@ router
     ],
     postActions
   );
+
 
 module.exports = router;

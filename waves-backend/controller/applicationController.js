@@ -1,5 +1,8 @@
 const { fetchUserById } = require("../service/usersService");
 const { connect } = require("../config/connectMysql");
+const { generateUuid, getDateNow } = require("../helper");
+const { publish } = require("../service/publisherService");
+const { REDIS_CHANNELS, ACTIONS } = require("../helper");
 
 // @desc get all applications by poolevent
 // @route GET /api/v1/application/event/:id
@@ -8,32 +11,30 @@ exports.getApplicationsEvent = async (req, res, next) => {
   if (req.params) {
     const { id } = req.params;
     req.conn.query(
-      `SELECT a.created_at,
-      a.id as application_id,
-      u.id as user_id,
-      u.first_name,
-      u.last_name,
-      a.text,
-      a.state
-      FROM applications a
-      JOIN users u ON u.id=a.user_id 
-      WHERE a.poolevent_id=${id};`,
+       `SELECT a.created_at,
+        a.idapplication as application_id,
+        a.text,
+        a.state,
+        a.user_id
+        FROM applications a
+        WHERE a.poolevent_id='${id}';`,
       (error, applications) => {
         if (error) {
           req.error = error;
           next();
         }
-        getStatistic(applications, (error, app_stats) => {
+        getStatistic(applications, async (error, state_and_apps) => {
           if (error) {
             req.error = error;
             next();
           }
-          resolveUserId(app_stats, (error, app_stats_user) => {
-            if (error) {
-              req.error = error;
+
+          resolveUserId(applications, (err, result) => {
+            if (err) {
+              req.error = err;
               next();
             }
-            req.data = app_stats_user;
+            req.data = result;
             next();
           });
         });
@@ -61,15 +62,13 @@ const getStatistic = async (applications, callback) => {
       and user_id="${application.user_id}") 
       as accepted;`,
       (error, resp) => {
+        conn.end();
         if (error) {
-          conn.end();
           callback(error);
         } else {
-          conn.end();
           application.statistic = resp[0];
           result.push(application);
           if (applications.length - 1 == i) {
-            conn.end();
             callback(null, result);
           }
         }
@@ -78,21 +77,22 @@ const getStatistic = async (applications, callback) => {
   });
 };
 
-// @desc get all applications by user
-// @route GET /api/v1/application/user/:id
+// @desc get applications by user
+// @route GET /api/v1/application/user
 // @access Private
 exports.getApplicationsUser = (req, res, next) => {
-  const { id } = req.user;
-  const query = `SELECT a.created_at, 
+  const { userId } = req.user;
+  const query = `SELECT 
+  a.created_at, 
   a.text, 
   a.state, 
   p.name, 
   a.poolevent_id, 
-  a.id 
+  a.idapplication 
   FROM applications a 
   JOIN poolevents p 
-  on a.poolevent_id=p.id 
-  WHERE a.user_id="${id}";`;
+  on a.poolevent_id=p.idevent 
+  WHERE a.user_id="${userId}";`;
 
   req.conn.query(query, (error, applications) => {
     if (error) {
@@ -100,6 +100,7 @@ exports.getApplicationsUser = (req, res, next) => {
       next();
     }
     req.data = applications;
+    next();
   });
 };
 
@@ -109,7 +110,7 @@ exports.getApplicationsUser = (req, res, next) => {
 exports.getApplicationById = (req, res, next) => {
   const { id } = req.user;
   req.conn.query(
-    `SELECT * FROM applications p WHERE p.id='${id}';`,
+    `SELECT * FROM applications p WHERE p.idevent='${id}';`,
     (err, application) => {
       if (err) {
         req.error = err;
@@ -125,16 +126,27 @@ exports.getApplicationById = (req, res, next) => {
 // @desc  create application
 // @route POST /api/v1/application
 // @access Private
-exports.postApplication = (req, res) => {
+exports.postApplication = (req, res, next) => {
   const { body } = req;
-  const { id } = req.user;
-  body.user_id = id;
+  const { userId } = req.user;
+  body.user_id = userId;
+  body.idapplication = generateUuid();
+  body.created_at = getDateNow();
+  body.updated_at = getDateNow();
+
   req.conn.query(`INSERT INTO applications SET ?`, body, (error, response) => {
     if (error) {
       req.error = error;
+      console.log(error);
       next();
     } else {
-      req.data = response;
+      publish(
+        REDIS_CHANNELS.WAVES,
+        ACTIONS.APPLICATION,
+        userId,
+        body.idapplication
+      );
+      req.data = body;
       next();
     }
   });
@@ -203,20 +215,20 @@ exports.getApplicationStatisticByUserId = (req, res, next) => {
 };
 
 const resolveUserId = async (applications, callback) => {
-  let result = [];
-  let i = 0;
-  applications.map(application => {
-    fetchUserById(application.user_id, (error, user) => {
-      if (error) {
-        callback(error);
-      }
-      application.user = user;
-      result.push(application);
-
-      if (applications.length - 1 === i) {
-        callback(null, result);
-      }
-      i++;
+  try {
+    let result = [];
+    applications.map(async (app, i) => {
+      app.user = await fetchUserById(app.user_id, (err, user) => {
+        if (err) {
+          callback(err);
+        }
+        app.user = user;
+        if (applications.length - 1 == i) {
+          return callback(null, applications);
+        }
+      });
     });
-  });
+  } catch (error) {
+    throw error;
+  }
 };

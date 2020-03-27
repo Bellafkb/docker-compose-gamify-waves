@@ -117,24 +117,45 @@ exports.getRolesByUserId = (user_id, callback) => {
 
 exports.fetchUserById = async (user_id, callback) => {
   try {
-    const { data } = await axios.post(
-      `${process.env.OAUTH_BASE_URI}/drops/rest/user/${user_id}?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`,
+    const user = await axios.post(
+      `${process.env.OAUTH_BASE_URI}/drops/rest/user/${user_id}?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}`,
       {}
     );
-    return callback(null, data);
+    const { id: userId, profiles } = user.data;
+    const { supporter } = profiles[0];
+    const { confirmed } = profiles[0];
+    const { firstName, lastName, fullName, crew } = supporter;
+    console.log(crew);
+    const { id: crewId, name: crewName } = crew;
+
+    let result = {
+      userId,
+      confirmed,
+      firstName,
+      lastName,
+      fullName,
+      crew: {
+        crewId,
+        crewName
+      }
+    };
+
+    return callback(null, result);
   } catch (error) {
     return callback(error);
   }
 };
 
-exports.fetchAllUsers = async (user_id, callback) => {
+exports.fetchAllUsers = async () => {
   try {
-    const { data } = await axios.get(
-      `${process.env.OAUTH_BASE_URI}/drops/rest/user?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`
+    const { data } = await axios.post(
+      `${process.env.OAUTH_BASE_URI}/drops/rest/user?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`,
+      {}
     );
-    return callback(null, data);
+    console.log(data);
+    return data;
   } catch (error) {
-    return callback(error);
+    throw error;
   }
 };
 

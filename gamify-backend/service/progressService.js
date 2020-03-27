@@ -15,7 +15,6 @@ exports.createChallengeProgress = async (userId, challenge_id) => {
       [userId, challenge_id, score, timestamp, timestamp, uuid, 0]
     );
     conn.end()
-    conn.destroy()
     return {
       idcp: uuid,
       challenge_id: challenge_id,
@@ -39,7 +38,6 @@ exports.incrementScorebyUserId = async (userId, type) => {
       AND c.type=? AND cp.completed=0`,
       [userId, type]
     );
-    conn.destroy()
     conn.end()
     return true;
   } catch (error) {
@@ -59,7 +57,6 @@ exports.getCompletedChallenges = async userId => {
       WHERE cp.user_id =? and cp.completed=0;`,
       [userId]
     );
-    conn.destroy()
     conn.end()
     return idcps;
   } catch (error) {
@@ -77,7 +74,6 @@ exports.setCompletedChallenges = async progressIds => {
       );
     });
     conn.end()
-    conn.destroy()
 
     return true;
   } catch (error) {

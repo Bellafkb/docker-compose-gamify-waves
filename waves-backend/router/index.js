@@ -3,9 +3,13 @@ const { getRegions } = require("../controller/regionController");
 const { getAllMonths } = require("../controller/monthController");
 const { authenticate } = require("../controller/oauthController");
 const { getInformation } = require("../controller/infoController");
-const { verify} = require("../middleware/tokenChecker");
-const { pooleventAccessControl } = require("../middleware/accessControlChecker");
+const { verify } = require("../middleware/tokenChecker");
+const {
+  pooleventAccessControl
+} = require("../middleware/accessControlChecker");
 const { getApplicationsUser } = require("../controller/applicationController");
+const { iniDbConnection } = require("../middleware/initDbConnection");
+const { handleResponse } = require("../middleware/handleResponse");
 
 router.get("/", (req, res) => {
   res.json({
@@ -14,9 +18,9 @@ router.get("/", (req, res) => {
   });
 });
 
-router.route("/regions").get(getRegions);
+router.route("/regions").get(iniDbConnection, getRegions, handleResponse);
 
-router.route("/months").get(getAllMonths);
+router.route("/months").get(iniDbConnection, getAllMonths, handleResponse);
 
 router.route("/onboarding").get(getApplicationsUser);
 

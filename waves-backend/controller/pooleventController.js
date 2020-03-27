@@ -1,4 +1,3 @@
-const { saveNotification } = require("../service/notificationService");
 const { validationResult } = require("express-validator");
 const { savePoolevent } = require("../service/pooleventService");
 const { saveLocation } = require("../service/locationService");
@@ -12,7 +11,6 @@ const { ACTIONS, REDIS_CHANNELS } = require("../helper");
 // @desc get all poolevents
 // @route GET /api/v1/poolevent
 // @access Public
-//TODO: pagination + sorting
 exports.getPoolEvents = async (req, res, next) => {
   let filter = "";
   let { limit, type, region, state, start, page } = req.query;
@@ -37,9 +35,7 @@ exports.getPoolEvents = async (req, res, next) => {
   if (region) {
     filter += ` AND l.locality="${region}"`;
   }
-  // @desc get poolevent by id
-  // @route GET /api/v1/poolevent/:id
-  // @access Public
+ 
   if (start) {
     filter += ` AND monthname(p.event_start)="${start}"`;
   }
@@ -98,8 +94,8 @@ exports.getPoolEventById = (req, res, next) => {
               WHERE p.idevent='${id}';`;
   req.conn.query(sql, (err, poolevent) => {
     if (err) {
-      req.error = err
-      next()
+      req.error = err;
+      next();
     } else {
       if (poolevent.length > 0) {
         const {
@@ -128,20 +124,17 @@ exports.getPoolEventById = (req, res, next) => {
           html,
           trophie
         } = poolevent[0];
-
         fetchUserById(asp_event_id, (error, asp_event_id) => {
           if (error) {
+            console.log(error);
             req.error = error;
             return next();
           }
+          console.log(asp_event_id);
           fetchUserById(user_id, (error, user) => {
             if (error) {
               req.error = error;
               next();
-            }
-            let crew = "";
-            if (user) {
-              crew = user.profiles[0].supporter.crew.name;
             }
             res.status(200).json({
               success: true,
@@ -157,8 +150,8 @@ exports.getPoolEventById = (req, res, next) => {
                 website,
                 supporter_lim,
                 state,
-                asp_event_id,
-                crew,
+                asp: asp_event_id,
+                user,
                 location: {
                   route,
                   street_number,
@@ -197,9 +190,9 @@ exports.postPoolEvent = (req, res, next) => {
     });
   }
   const { front, location, description } = req.body;
-  //front.user_id = req.user.id
+  front.user_id = req.user.id;
 
-  front.user_id = "4a74141e-c2c0-46a0-9c0c-84bef8be7d0f";
+  //front.user_id = "4a74141e-c2c0-46a0-9c0c-84bef8be7d0f";
   savePoolevent(front, (error, { idevent }) => {
     if (error) {
       res.status(400).json({
@@ -280,23 +273,21 @@ exports.deletePoolEvent = (req, res) => {
 // @desc edit poolevent by id
 // @route PUT /api/v1/poolevent/:id
 // @access Private
-exports.putPoolEvent = async (req, res) => {
-  const conn = await connect();
-  req.conn = conn;
-  const { body } = req;
+exports.putPoolEvent = async (req, res, next) => {
+  const { front, location, description } = req.body;
   const { id } = req.params;
-  conn.query(
-    `UPDATE poolevents SET ? WHERE id =${id};`,
-    body.front,
+  req.conn.query(
+    `UPDATE poolevents SET ? WHERE idevent ='${id}';`,
+    front,
     (error, resp) => {
       if (error) {
         req.error = error;
         next();
       } else {
-        if (body.location) {
-          conn.query(
-            `UPDATE locations set ? where poolevent_id=${id}`,
-            body.location,
+        if (location) {
+          req.conn.query(
+            `UPDATE locations set ? where poolevent_id='${id}'`,
+            location,
             (error, response) => {
               if (error) {
                 req.error = error;
@@ -304,10 +295,10 @@ exports.putPoolEvent = async (req, res) => {
               }
             }
           );
-          if (body.description) {
-            conn.query(
-              `UPDATE descriptions set ? where poolevent_id=${id}`,
-              body.description,
+          if (description) {
+            req.conn.query(
+              `UPDATE descriptions set ? where poolevent_id='${id}'`,
+              description,
               (error, response) => {
                 if (error) {
                   req.error = error;
@@ -321,10 +312,10 @@ exports.putPoolEvent = async (req, res) => {
             req.data = response;
             next();
           }
-        } else if (body.description) {
-          conn.query(
-            `UPDATE descriptions set ? where poolevent_id=${id}`,
-            body.description,
+        } else if (description) {
+          req.conn.query(
+            `UPDATE descriptions set ? where poolevent_id='${id}'`,
+            description,
             (error, response) => {
               if (error) {
                 req.error = error;
@@ -345,10 +336,8 @@ exports.putPoolEvent = async (req, res) => {
 // @route GET /api/v1/poolevent/:id
 // @access Public
 exports.getPoolEventByUserId = async (req, res, next) => {
-  const { id } = req.user;
-  const conn = await connect();
-  req.conn = conn;
-  conn.query(
+  const { userId } = req.user;
+  req.conn.query(
     `SELECT 
     p.idevent, 
     p.name,
@@ -362,14 +351,15 @@ exports.getPoolEventByUserId = async (req, res, next) => {
     l.postal_code,
     pt.name as type_name 
     FROM poolevents p 
-    join locations l on l.poolevent_id=p.id 
+    join locations l on l.poolevent_id=p.idevent 
     join poolevent_types pt on pt.idevent_type=p.idevent_type
-    WHERE user_id='${id}';`,
+    WHERE user_id='${userId}';`,
     (error, resp) => {
       if (error) {
         req.error = error;
         next();
       } else {
+        console.log(resp);
         req.data = resp;
         next();
       }

@@ -19,7 +19,6 @@ exports.getAchievements = async (req, res) => {
   }
 };
 
-//type has to be in challenges => multiplicity
 exports.postAchievement = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -29,20 +28,18 @@ exports.postAchievement = async (req, res) => {
         errors: errors.array()
       });
     }
-    const { badge, challenge } = req.body;
+    const { badge, challenges } = req.body;
     const { name, img_url, desc } = badge;
-    const { points, type } = challenge;
 
-    const achievementProgress = await createAchievement(
+    const achievement = await createAchievement(
       name,
       desc,
-      type,
       img_url,
-      points
+      challenges
     );
     res.status(200).json({
       success: true,
-      progress: achievementProgress
+      data: achievement
     });
   } catch (error) {
     res.status(400).json({

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { check } = require("express-validator");
-const { verify, verifyX } = require("../middleware/tokenChecker");
+const { verify } = require("../middleware/tokenChecker");
 const { handleResponse } = require("../middleware/handleResponse");
 const { iniDbConnection } = require("../middleware/initDbConnection");
 
@@ -20,7 +20,7 @@ const {
 
 router
   .route("/")
-  .get(verify,iniDbConnection, getPoolEvents, handleResponse)
+  .get(iniDbConnection, getPoolEvents, handleResponse)
   .post(
     [
       check("front.name")
@@ -70,7 +70,7 @@ router
 router
   .route("/:id")
   .get(iniDbConnection, getPoolEventById, handleResponse)
-  .put(verify, pooleventAccessControl, putPoolEvent, handleResponse)
+  .put(verify, iniDbConnection, putPoolEvent, handleResponse)
   .delete(
     verify,
     checkAccessControl("updateAny", "poolevent"),
@@ -78,6 +78,8 @@ router
     handleResponse
   );
 
-router.route("/user/me").get(verify, getPoolEventByUserId); //private
+router
+  .route("/user/me")
+  .get(verify, iniDbConnection, getPoolEventByUserId, handleResponse); //private
 
 module.exports = router;

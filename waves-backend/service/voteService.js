@@ -13,14 +13,12 @@ exports.saveVote = async (userId, commentId, callback) => {
     const conn = await connect();
     conn.query(`INSERT INTO votes SET ?`, vote, async (error, v) => {
       if (error) {
-        conn.end(error => {
-          return callback(error);
-        });
+      console.log(error);
+        callback(error);
       }
-      await publish(REDIS_CHANNELS.WAVES, ACTIONS.VOTE, userId, id);
-      conn.end(() => {
-        return callback(null, vote);
-      });
+      publish(REDIS_CHANNELS.WAVES, ACTIONS.VOTE, userId, id);
+      conn.end()
+      callback(null, vote);
     });
   } catch (error) {
     throw error;

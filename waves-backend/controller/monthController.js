@@ -1,16 +1,15 @@
-
-exports.getAllMonths = (req, res,next) => {
+exports.getAllMonths = (req, res, next) => {
   const sql = `SELECT DISTINCT
     (MONTHNAME(DATE(p.event_start))) as month
     FROM wavesdb.poolevents p;`;
-  req.conn.query(sql, async (error, months) => {
+  req.conn.query(sql, (error, months) => {
     if (error) {
-      req.error = error
-      return next()
+      req.error = error;
+      next();
     } else {
-      const result = await months.map(({ month }) => month);
-      req.data = result
-      next()
+      const result = months.map(({ month }) => month);
+      req.data = result;
+      next();
     }
   });
 };
