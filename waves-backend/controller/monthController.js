@@ -1,18 +1,15 @@
-const { initConnection } = require("../config/connectMysql");
-
-exports.getAllMonths = (req, res) => {
+exports.getAllMonths = (req, res, next) => {
   const sql = `SELECT DISTINCT
-    (MONTHNAME(p.event_start)) as month
+    (MONTHNAME(DATE(p.event_start))) as month
     FROM wavesdb.poolevents p;`;
-  global.conn.query(sql, async (error, months) => {
+  req.conn.query(sql, (error, months) => {
     if (error) {
-      res.status(400).json({ success: false, message: error.message });
+      req.error = error;
+      next();
     } else {
-      const result = await months.map(({ month }) => month);
-      res.status(200).json({
-        success: true,
-        months: result
-      });
+      const result = months.map(({ month }) => month);
+      req.data = result;
+      next();
     }
   });
 };

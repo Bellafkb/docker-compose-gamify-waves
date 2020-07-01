@@ -1,3 +1,6 @@
+const { generateUuid } = require("../helper");
+const { connect } = require("../config/connectMysql");
+
 exports.getNumOfPeByUserId = (userId, callback) => {
   try {
     global.conn.query(
@@ -16,25 +19,36 @@ exports.getNumOfPeByUserId = (userId, callback) => {
   }
 };
 
-exports.savePoolevent = (poolevent, callback) => {
+exports.savePoolevent = async (
+  frontData,
+  callback
+) => {
+  const conn = await connect();
+  const idevent = generateUuid();
+  frontData.idevent = idevent;
   try {
     const sql = "INSERT INTO poolevents SET ?;";
-    global.conn.query(sql, poolevent, (error, resp) => {
+    conn.query(sql, frontData, (error, resp) => {
       if (!error) {
-        callback(null, resp);
+        conn.end();
+        callback(null, frontData);
       } else {
+        conn.end();
         callback(error);
       }
     });
   } catch (error) {
+    conn.end();
     callback(error);
   }
 };
 
-exports.incrementFaveCount = (id, callback) => {
+exports.incrementFaveCount = async (id, callback) => {
   try {
-    const sql = "UPDATE poolevents SET fave_count=fave_count+1 WHERE id=?;";
-    global.conn.query(sql, id, (error, resp) => {
+    const conn = await connect()
+    const sql = "UPDATE poolevents SET fave_count=fave_count+1 WHERE idevent=?;";
+    conn.query(sql, id, (error, resp) => {
+      conn.end()
       if (!error) {
         callback(null, resp);
       } else {

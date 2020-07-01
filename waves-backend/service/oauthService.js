@@ -1,11 +1,9 @@
-exports.authenticate = (req, res) => {
+exports.getUserAccessToken = async (userId, callback) => {
   try {
-    const { code } = req;
-    res.status(200).json({ code });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error
+    global.redisClient.get(userId, (err, access_token) => {
+      callback(err, access_token);
     });
+  } catch (error) {
+    throw error;
   }
 };

@@ -1,11 +1,27 @@
-const subscriber = require("redis")
+const redis = require("redis");
+const { handleMessage } = require("../service/messageBrokerService");
+
 const port_redis = "6379";
 
-console.log(`cache redis connected to port ${port_redis}`);
-subscriber.on("message", function(channel, message) {
-  console.log(
-     message + " on channel: " + channel + " is arrive!"
-  );
-});
+(async () => {
+  let subscriber = await redis.createClient({
+    host: "redis",
+    port: 6379
+  });
+  
+  console.log()
+  subscriber.on("message", async function(channel, message) {
+    console.log(`message: ${message}, on channel: ${channel}`);
+    const { action, userId, sourceId } = JSON.parse(message);
+    if (action && userId && sourceId) {
+      await handleMessage(action, userId, sourceId);
+    } else {
+      console.log(
+        `invalide message value log --> category: 
+        ${category}, userId: ${userId}, sourceId: ${sourceId}`
+      );
+    }
+  });
 
-subscriber.subscribe("WAVES_BACKEND");
+  subscriber.subscribe("WAVES");
+})();

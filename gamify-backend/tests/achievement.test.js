@@ -1,3 +1,16 @@
+const {
+  createAchievement,
+} = require("../service/achievementService");
+
+
+
 test("achievement", async () => {
-  expect(1+1).toBe(2);
+  const response = await createAchievement(
+    "new comment",
+    "comment",
+    "comments",
+    "loremscoop",
+    3
+  );
+  expect(response.badge.name).toBe("new comment");
 });

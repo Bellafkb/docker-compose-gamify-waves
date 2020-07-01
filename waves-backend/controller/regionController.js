@@ -1,13 +1,12 @@
-exports.getRegions = (req, res) => {
+exports.getRegions = (req, res,next) => {
   const sql = "SELECT DISTINCT l.locality FROM locations as l;";
-  global.conn.query(sql, (error, regions) => {
+  req.conn.query(sql, (error, regions) => {
     if (error) {
-      res.status(400).json({ success: false, message: error.message });
+      req.error=error
+      next()
     } else {
-      res.status(200).json({
-        success: true,
-        data: regions
-      });
+      req.data = regions
+      next()
     }
   });
 };

@@ -1,25 +1,31 @@
 const { incrementFaveCount } = require("../service/pooleventService");
+const { generateUuid, getDateNow } = require("../helper");
+
 // @desc get favorite by userId
 // @route GET /api/v1/favorite/:id
 // @access private
-exports.getFavoriteByUserId = (req, res) => {
-  const { user } = req;
-  const sql = `SELECT l.*, pt.*,p.id,p.name,p.website,p.event_start,p.event_end FROM favorites f 
-  JOIN poolevents p ON f.poolevent_id=p.id 
-  join locations l on l.poolevent_id=p.id
-  join poolevent_types pt on p.idevent_type=pt.idevent_type
-  WHERE f.user_id='${user.id}';`;
-  global.conn.query(sql, (err, favorites) => {
+exports.getFavoriteByUserId = (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `SELECT 
+  l.*, 
+  pt.*,
+  p.idevent,
+  p.name,
+  p.website,
+  p.event_start,
+  p.event_end 
+  FROM favorites f 
+  LEFT JOIN poolevents p ON f.poolevent_id=p.idevent 
+  LEFT join locations l on l.poolevent_id=p.idevent
+  LEFT join poolevent_types pt on p.idevent_type=pt.idevent_type
+  WHERE f.user_id='${userId}';`;
+  req.conn.query(sql, (err, favorites) => {
     if (err) {
-      res.status(400).json({
-        success: false,
-        message: `Error in getFavoriteByUserId: ${err.message}`
-      });
+      req.error = err;
+      next();
     } else {
-      res.status(200).json({
-        success: true,
-        data: favorites
-      });
+      req.data = favorites;
+      next();
     }
   });
 };
@@ -27,28 +33,27 @@ exports.getFavoriteByUserId = (req, res) => {
 // @desc  create favorite
 // @route POST /api/v1/favorite
 // @access Private
-exports.postFavorite = (req, res) => {
+exports.postFavorite = (req, res, next) => {
   const { body, user } = req;
-  body.user_id = user.id;
+  body.user_id = user.userId;
+  const idfavorite = generateUuid();
+  const created_at = getDateNow();
+  body.idfavorite = idfavorite;
+  body.created_at = created_at;
+
   const sql = `INSERT INTO favorites SET ?`;
-  global.conn.query(sql, body, (error, favorite) => {
+  req.conn.query(sql, body, (error, favorite) => {
     if (error) {
-      res.status(400).json({
-        success: false,
-        messaage: error.message
-      });
+      req.error = error;
+      next();
     } else {
       incrementFaveCount(body.poolevent_id, (error, resp) => {
         if (error) {
-          res.status(400).json({
-            success: false,
-            messaage: error.message
-          });
+          req.error = error;
+          next();
         }
-        res.status(200).json({
-          success: true,
-          data: favorite
-        });
+        req.data = body;
+        next();
       });
     }
   });

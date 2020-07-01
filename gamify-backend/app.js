@@ -1,13 +1,20 @@
 require("./config/connectMysql");
 require("./config/connectRedis");
+require("./config/redisSubscriptions");
+require("./service/intervalTrophieService");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan")("dev");
 const express = require("express");
-const { achievementRouter, route } = require("./router");
 const dotenv = require("dotenv");
 const cors = require("cors");
-
+const {
+  achievementRouter,
+  route,
+  crewRanking,
+  actionsRouter,
+  progressRouter
+} = require("./router");
 
 require("colors");
 
@@ -23,8 +30,12 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
-app.use("/", route);
-app.use("/achievement", achievementRouter);
+const base = "/backend/gamify";
+app.use(base, route);
+app.use(base + "/achievement", achievementRouter);
+app.use(base + "/leaderboard", crewRanking);
+app.use(base + "/action", actionsRouter);
+app.use(base + "/progress", progressRouter);
 
 app.use((req, res, callback) => {
   const error = new Error("not found");
@@ -41,5 +52,5 @@ app.use((error, req, res, callback) => {
 const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
-  console.log(`App running in ${port} mode on port ${port}`.green.bold);
+  console.log(`App running in ${port} mode on port ${port}`.rainbow);
 });

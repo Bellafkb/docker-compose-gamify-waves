@@ -1,4 +1,5 @@
 const { createCacheKey } = require("../helper");
+
 exports.saveToCache = (key, tableName, data) => {
   let key = createCacheKey(key, tableName);
   global.redis_client.setex(

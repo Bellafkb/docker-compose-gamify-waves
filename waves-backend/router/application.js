@@ -1,5 +1,8 @@
 const router = require("express").Router();
-const { verify, verifyX } = require("../middleware/tokenChecker");
+const { verify } = require("../middleware/tokenChecker");
+const { handleResponse } = require("../middleware/handleResponse");
+const { iniDbConnection } = require("../middleware/initDbConnection");
+
 const {
   pooleventAccessControl,
   applicationAccessControl
@@ -11,12 +14,11 @@ const {
   getApplicationsEvent,
   getApplicationsUser,
   postApplication,
-  putApplication,
-  getApplicationStatisticByUserId
+  putApplication
 } = require("../controller/applicationController");
 
 router.route("/").post(
-  verifyX,
+  verify,
   [
     check("text").isString(),
     check("poolevent_id")
@@ -24,18 +26,28 @@ router.route("/").post(
       .isEmpty()
       .isNumeric()
   ],
-  postApplication
+  iniDbConnection,
+  postApplication,
+  handleResponse
 );
 
 router
   .route("/:id")
-  .put(verifyX, applicationAccessControl, putApplication)
-  .delete(verify, deleteApplication);
+  .put(
+    verify,
+    applicationAccessControl,
+    iniDbConnection,
+    putApplication,
+    handleResponse
+  )
+  .delete(verify, iniDbConnection, deleteApplication, handleResponse);
 
 router
   .route("/poolevent/:id")
-  .get(verifyX, pooleventAccessControl, getApplicationsEvent);
+  .get(verify, iniDbConnection, getApplicationsEvent, handleResponse);
 
-router.route("/user").get(verify, getApplicationsUser);
+router
+  .route("/user")
+  .get(verify, iniDbConnection, getApplicationsUser, handleResponse);
 
 module.exports = router;

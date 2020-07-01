@@ -1,39 +1,33 @@
 const {
   createLeaderboardEntry,
-  updateLeaderboardEntryByCrewId
+  incrementLeaderBoardEntryByCrewId,
+  handleAction,
+  getCrewLeaderboard
 } = require("../service/crewRankingService");
+const { generateUuid } = require("../helper");
 
-const mariadb = require("mariadb");
+const CREWID = generateUuid();
 
-const CREWID = "";
-
-const connect = async () => {
-  try {
-    const pool = mariadb.createPool({
-      host: "localhost",
-      user: "root",
-      password: "password",
-      database: "gamifydb"
-    });
-    global.conn = await pool.getConnection();
-  } catch (error) {
-    throw error.message;
-  }
-};
 
 test("create new crew leaderboard entry", async () => {
-  await connect();
-  const { affectedRows } = await createLeaderboardEntry("CREWTESTID");
+  const { affectedRows } = await createLeaderboardEntry(CREWID);
   expect(affectedRows).toBe(1);
-  global.conn.end();
 });
 
 test("update crew leaderboard entry", async () => {
-  await connect();
-  const { affectedRows } = await updateLeaderboardEntryByCrewId(
-    "CREWTESTID",
-    2
+  const { affectedRows } = await incrementLeaderBoardEntryByCrewId(
+    generateUuid(),
+    20
   );
   expect(typeof affectedRows).toBe(typeof 1);
-  global.conn.end();
+});
+
+test("handleAction", async () => {
+  const response = await handleAction("READ", generateUuid(), generateUuid());
+  expect(response).toBe(true);
+});
+
+test("get crew leaderboard", async () => {
+  const leaderboard = await getCrewLeaderboard();
+  expect(leaderboard.length != undefined).toBe(true);
 });

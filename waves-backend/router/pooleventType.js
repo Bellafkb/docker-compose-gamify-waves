@@ -1,17 +1,18 @@
 const router = require("express").Router();
 const { verify } = require("../middleware/tokenChecker");
 const { checkAccessControl } = require("../middleware/accessControlChecker");
+const { iniDbConnection } = require("../middleware/initDbConnection");
+const { handleResponse } = require("../middleware/handleResponse");
+const { postPeType,getAllPeType } = require("../controller/pooleventTypeController");
+
+
 const { check } = require("express-validator");
 
-const {
-  getAllPeType,
-  postPeType,
-  putPeType
-} = require("../controller/pooleventTypeController");
+
 
 router
   .route("/")
-  .get(getAllPeType)
+  .get(iniDbConnection, getAllPeType, handleResponse)
   .post(
     verify,
     checkAccessControl("createAny", "event_type"),
@@ -22,8 +23,5 @@ router
     postPeType
   );
 
-router
-  .route("/:id")
-  .put(verify, checkAccessControl("updateAny", "event_type"), putPeType);
 
 module.exports = router;

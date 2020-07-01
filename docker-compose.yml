@@ -1,5 +1,6 @@
-version: "2"
-services:
+version: "3"
+  
+services:  
   gamifydb:
     container_name: gamifydb
     image: mariadb
@@ -25,46 +26,55 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_USER=root
       - MYSQL_DATABASE=wavesdb
-      
 
   redis:
+    container_name: cache_messagebroker
     image: redis
     expose:
       - 6379
+
   gamify-backend:
     container_name: gamify-backend
-    build: gamify-backend
-    command: npm run dev
     restart: always
+    build:
+      context: ./gamify-backend
+      dockerfile: Dockerfile.dev
     volumes:
-      - .:/usr/app/gamify-backend
-      - /usr/app/gamify-backend/node_modules
-    ports:
-      - "3000:3000"
+        - ./gamify-backend:/usr/src/app
+        - /usr/src/app/node_modules 
     depends_on:
       - gamifydb
       - redis
-
+    ports:
+      - "5000:5000"  
   waves-backend:
     container_name: waves-backend
-    build: waves-backend
-    command: npm run dev
+    restart: always
+    build:
+      context: ./waves-backend
+      dockerfile: Dockerfile.dev
     volumes:
-      - .:/usr/app/waves-backend
-      - /usr/app/waves-backend/node_modules
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_USER=root
-      - MYSQL_DATABASE=wavesdb
-      - NODE_ENV=dev
-      - PORT=5000
-      - OAUTH_BASE_URI=https://stage.vivaconagua.org
-      - CLIENT_ID=wavesdev
-      - CLIENT_SECRET=wavesdev
-      - REDIRECT_URI=http://localhost/waves/api/v1/oauth
-    ports:
-      - "5000:5000"
+        - ./waves-backend:/usr/src/app
+        - /usr/src/app/node_modules 
     depends_on:
-      - wavesdb
+      - gamifydb
       - redis
-    
+    ports:
+      - "4000:4000" 
+    environment: 
+      - OAUTH_BASE_URI=https://stage.vivaconagua.org
+      - REDIRECT_URI=http://localhost/backend/waves/api/v1/oauth
+      - CLIENT_ID=waves
+      - CLIENT_SECRET=977bde90-6707-11ea-bc55-0242ac130003
+      - CACHE_REDIS_HOST=redis
+      - CACHE_REDIS_PORT=6379
+
+  nginx: 
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+      - 443:443
+        
