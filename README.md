@@ -2,6 +2,10 @@
 
 ## quick start
 
-docker-compose build
+###  git clone 
 
-docker-compose up
+### cd /docker-compose-gamify-waves
+
+### docker-compose build
+
+### docker-compose up
