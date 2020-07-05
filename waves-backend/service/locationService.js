@@ -3,6 +3,7 @@ const {generateUuid} = require("../helper")
 
 exports.saveLocation = async (location, callback) => {
   try {
+    console.log(location);
     const conn = await connect()
     const uuid = generateUuid()
     location.id= uuid
@@ -11,6 +12,7 @@ exports.saveLocation = async (location, callback) => {
       if (!error) {
         callback(null, location);
       } else {
+        console.log(location);
         callback(error);
       }
     });

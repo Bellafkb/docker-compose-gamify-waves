@@ -26,6 +26,7 @@ exports.savePoolevent = async (
   const conn = await connect();
   const idevent = generateUuid();
   frontData.idevent = idevent;
+  console.log("savePoolevent:",frontData);
   try {
     const sql = "INSERT INTO poolevents SET ?;";
     conn.query(sql, frontData, (error, resp) => {
@@ -33,6 +34,7 @@ exports.savePoolevent = async (
         conn.end();
         callback(null, frontData);
       } else {
+        console.log(error);
         conn.end();
         callback(error);
       }

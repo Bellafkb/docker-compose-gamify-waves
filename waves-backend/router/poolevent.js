@@ -63,6 +63,7 @@ router
       check("description.text").isString(),
       check("description.html").isString()
     ],
+    verify,
     postPoolEvent,
     handleResponse
   );

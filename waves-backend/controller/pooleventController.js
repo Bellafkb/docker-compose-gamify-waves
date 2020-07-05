@@ -189,25 +189,25 @@ exports.postPoolEvent = (req, res, next) => {
       errors: errors.array()
     });
   }
+  console.log("user:",req.user);
   const { front, location, description } = req.body;
-  front.user_id = req.user.id;
-
-  //front.user_id = "4a74141e-c2c0-46a0-9c0c-84bef8be7d0f";
+  console.log("front:",front)
+  front.user_id = req.user.userId;
   savePoolevent(front, (error, { idevent }) => {
     if (error) {
-      res.status(400).json({
-        message: error.message
-      });
+      req.error = error
+      next()
     }
     location.poolevent_id = idevent;
     saveLocation(location, (error, locationResp) => {
       if (error) {
+        req.error = error
         next();
       }
       description.poolevent_id = idevent;
       saveDescription(description, (error, descriptionResp) => {
         if (error) {
-          res.status(400).json({ message: error.message });
+          req.error = error
         }
         publish(
           REDIS_CHANNELS.WAVES,
@@ -215,11 +215,12 @@ exports.postPoolEvent = (req, res, next) => {
           front.user_id,
           idevent
         );
-        res.status(200).json({
+          req.data = {
           location: locationResp,
           poolevent: idevent,
           description: descriptionResp
-        });
+        }
+        next()
       });
     });
   });

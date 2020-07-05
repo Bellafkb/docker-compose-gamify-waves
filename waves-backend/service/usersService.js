@@ -182,14 +182,16 @@ exports.fetchProfile = async access_token => {
       `${process.env.OAUTH_BASE_URI}/drops/rest/user/${data.id}?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}`,
       {}
     );
-
+      console.log("profile:",user.data);
+    console.log(JSON.stringify(user.data));
     const { id: userId, profiles, roles: supporterRoles } = user.data;
     const [firstRole, secondRole] = supporterRoles;
     const { supporter } = profiles[0];
     const { confirmed } = profiles[0];
     const { firstName, lastName, fullName, crew, roles } = supporter;
-    const { id: crewId, name: crewName } = crew;
-    const { name: crewRoleName } = roles[0];
+    
+    const { id: crewId , name: crewName } = crew? crew: {};
+    const { name: crewRoleName } = roles.length? roles[0]: 'None';
 
     return {
       userId,
@@ -198,8 +200,8 @@ exports.fetchProfile = async access_token => {
       lastName,
       fullName,
       crew: {
-        crewId,
-        crewName
+        crewId: crew? crewId: '' ,
+        crewName: crew? crewName: ''
       },
       roles: {
         crewRoleName,

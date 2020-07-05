@@ -4,6 +4,6 @@ const {
     getMyAchievementProgress
 } = require("../controller/progressController");
 
-router.route("/").get( getMyAchievementProgress);
+router.route("/:userId").get(getMyAchievementProgress);
 
 module.exports = router;

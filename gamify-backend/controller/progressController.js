@@ -2,7 +2,8 @@ const { connectToDb } = require("../config/connectMysql");
 
 exports.getMyAchievementProgress = async (req, res) => {
   try {
-    const user_id = "4a74141e-c2c0-46a0-9c0c-84bef8be7d0f";
+    const user_id = req.params.userId;
+    console.log(user_id);
     const conn = await connectToDb();
     const badges = await conn.query("select * from badges;");
     const achievements = await Promise.all(
