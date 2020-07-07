@@ -38,7 +38,7 @@ services:
     restart: always
     build:
       context: ./gamify-backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     volumes:
         - ./gamify-backend:/usr/src/app
         - /usr/src/app/node_modules 
@@ -48,7 +48,7 @@ services:
     ports:
       - "5000:5000"
     environment: 
-      - NODE_ENV=production
+      - NODE_ENV=dev
 
       - OAUTH_BASE_URI=https://stage.vivaconagua.org
       
@@ -74,7 +74,7 @@ services:
     restart: always
     build:
       context: ./waves-backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     volumes:
         - ./waves-backend:/usr/src/app
         - /usr/src/app/node_modules 

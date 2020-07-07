@@ -162,13 +162,22 @@ exports.fetchAllUsers = async () => {
 exports.fetchToken = async code => {
   try {
     const { data } = await axios.get(
-      `${process.env.OAUTH_BASE_URI}/drops/oauth2/access_token?grant_type=authorization_code&client_id=${process.env.CLIENT_ID}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}`
+      `${
+        process.env.OAUTH_BASE_URI
+      }/drops/oauth2/access_token?grant_type=authorization_code&client_id=${
+        process.env.NODE_ENV === "dev"
+          ? process.env.CLIENT_ID
+          : process.env.CLIENT_ID_PRODUCTION
+      }&code=${code}&redirect_uri=${
+        process.env.NODE_ENV === "dev"
+          ? process.env.REDIRECT_URI
+          : process.env.REDIRECT_URI_PRODUCTION
+      }`
     );
-    console.log(
-      `${process.env.OAUTH_BASE_URI}/drops/oauth2/access_token?grant_type=authorization_code&client_id=${process.env.CLIENT_ID}&code=${code}&redirect_uri=${process.env.REDIRECT_URI}`
-    );
+
     return data;
   } catch (error) {
+    console.log(error.message, error.response.data);
     throw error;
   }
 };
@@ -178,20 +187,24 @@ exports.fetchProfile = async access_token => {
     const { data } = await axios.get(
       `${process.env.OAUTH_BASE_URI}/drops/oauth2/rest/profile?access_token=${access_token}`
     );
+    console.log("data:", data);
+    console.log(
+      "url:",
+      `${process.env.OAUTH_BASE_URI}/drops/rest/user/${data.id}?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}`
+    );
     const user = await axios.post(
       `${process.env.OAUTH_BASE_URI}/drops/rest/user/${data.id}?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}`,
       {}
     );
-      console.log("profile:",user.data);
-    console.log(JSON.stringify(user.data));
+    console.log("user:", user);
     const { id: userId, profiles, roles: supporterRoles } = user.data;
     const [firstRole, secondRole] = supporterRoles;
     const { supporter } = profiles[0];
     const { confirmed } = profiles[0];
     const { firstName, lastName, fullName, crew, roles } = supporter;
-    
-    const { id: crewId , name: crewName } = crew? crew: {};
-    const { name: crewRoleName } = roles.length? roles[0]: 'None';
+
+    const { id: crewId, name: crewName } = crew ? crew : {};
+    const { name: crewRoleName } = roles.length ? roles[0] : "None";
 
     return {
       userId,
@@ -200,8 +213,8 @@ exports.fetchProfile = async access_token => {
       lastName,
       fullName,
       crew: {
-        crewId: crew? crewId: '' ,
-        crewName: crew? crewName: ''
+        crewId: crew ? crewId : "",
+        crewName: crew ? crewName : ""
       },
       roles: {
         crewRoleName,

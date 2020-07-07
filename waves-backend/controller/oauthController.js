@@ -5,10 +5,12 @@ const redis = require("redis");
 exports.authenticate = async (req, res) => {
   try {
     const { code, state } = req.query;
+    console.log(code, state);
     const { access_token, refresh_token, token_type } = await fetchToken(code);
     console.log(access_token);
     
     const data = await fetchProfile(access_token);
+    console.log(data);
     saveUserSession(data.userId, access_token)
     res.cookie(
       "waves_access_token",
@@ -18,7 +20,8 @@ exports.authenticate = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      message: error.message,
+      error: error.response.data
     });
   }
 };

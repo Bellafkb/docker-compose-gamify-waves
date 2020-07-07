@@ -1,9 +1,18 @@
 FROM node:latest
 
-WORKDIR /usr/app
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# Install dependencies
 
 COPY package.json .
-RUN npm i -g nodemon
-RUN npm install --quiet
+RUN npm install
+RUN npm install -g nodemon
 
+# Bundle app source
 COPY . .
+
+# Exports
+EXPOSE 3000
+CMD [ "npm", "run", "start" ]
