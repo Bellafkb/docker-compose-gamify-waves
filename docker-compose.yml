@@ -119,7 +119,7 @@ services:
     container_name: waves-frontend
     build:
       context: ./waves-frontend
-      target: 'develop-stage'
+      #target: 'develop-stage'
     ports:
     - '8080:8080'
     volumes:
