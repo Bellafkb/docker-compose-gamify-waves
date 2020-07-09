@@ -1,0 +1,353 @@
+{
+  "defaults": {
+    "support": "it@vivaconagua.org"
+  },
+  "errors": {
+    "ajax": {
+      "badRequest": {
+        "header": "Das versteht der Server nicht",
+        "msg": "Die Daten, die du geschickt hast, können vom Server nicht verstanden werden. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
+      },
+      "forbidden": {
+        "header": "Das darfst du nicht",
+        "msg": "Leider hast du nicht die Berechtigung dies zu machen."
+      },
+      "notFound": {
+        "header": "Server nicht gefunden",
+        "msg": "Der Server scheint nicht erreichbar zu sein. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
+      },
+      "server": {
+        "header": "Ooops...",
+        "msg": "Ein interner Fehler ist aufgetreten. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
+      }
+    }
+  },
+  "household": {
+    "header": {
+      "box": {
+        "list": "Übersicht",
+        "expense": "Ausgabe",
+        "transitions": "Prozess"
+      },
+      "table": {
+        "what": "Was?",
+        "wherefor": "Wofür?",
+        "crew": "Crew",
+        "amount": "Betrag",
+        "date": "Datum",
+        "supporter": "Beteiligte",
+        "state": "Status",
+        "process": "Bearbeitung"
+      }
+    },
+    "placeholder": {
+      "amount": "Betrag",
+      "what": "Was?",
+      "wherefor": "Wofür?",
+      "iban": "IBAN",
+      "bic": "BIC",
+      "request": "Nur eine Anfrage"
+    },
+    "buttons": {
+      "save": "Speichern",
+      "edit": "Editieren",
+      "cancel": "Abbrechen"
+    },
+    "hints": {
+      "expense": "Hier kannst du alle Ausgaben hinzufügen.<br /><br />Beachte bitte, dass es passieren kann, dass eine Ausgabe nicht erstattet werden kann, etwa weil diese nicht dem Satzungszeck von VcA entspricht.<br /><br />Falls du dir unsicher bist oder eine größere Auslage tätigen willst, kannst du eine Ausgabe zuerst beantragen und erhälst gegebenenfalls eine Freigabe bevor du das Geld auslegst.",
+      "dates": {
+        "created": "{date} (eingetragen)",
+        "updated": "{date} (aktualisiert)"
+      },
+      "reason": {
+        "what": {
+          "missing": "Nichts angegeben"
+        },
+        "wherefor": {
+          "missing": "Kein Grund angegeben"
+        }
+      }
+    },
+    "states": {
+      "Unknown": "Zustand kann nicht erkennt werden",
+      "AppliedFor": "Auszahlung beantragt",
+      "Requested": "Freigabe angefragt",
+      "Approved": "Genehmigt",
+      "ToRepay": "Zurückzuzahlen",
+      "Repaid": "Zurückgezahlt",
+      "Refused": "Verwehrt",
+      "HouseholdComplete": "Unvollständig",
+      "NotEditable": "Unveränderbar"
+    },
+    "transitions": {
+      "VolunteerManager": {
+        "knows": "Ich weiß davon",
+        "knowsNothing": "Ich weiß davon nichts"
+      },
+      "Employee": {
+        "free": "Freigeben",
+        "block": "Verwehren",
+        "repay": "Zurückzahlen"
+      },
+      "Owner": {
+        "requestPayment": "Rückzahlung beantragen"
+      }
+    },
+    "process": {
+      "VolunteerManager": {
+        "RoleName": "ASP",
+        "Idle": "Nicht bearbeitet",
+        "Knows": "Weiß Bescheid",
+        "KnowsNothing": "Weiß nichts davon"
+      },
+      "Employee": {
+        "RoleName": "Hauptamt",
+        "Idle": "Nicht bearbeitet",
+        "Freed": "Freigegeben",
+        "Blocked": "Verwehrt"
+      }
+    }
+  },
+  "donation": {
+    "header": {
+      "frame": {
+        "create": "Spende hinzufügen"
+      },
+      "box": {
+        "list": "Alle Spenden",
+        "list-methods": "Editieren",
+        "save": "Speichern",
+        "amount": "Spendenbetrag",
+        "externalTransactions": "Details externer Überweiser",
+        "action": "Aktion"
+      },
+      "donationSource": {
+        "sourceSelect": "Woher kommt die Spende?",
+        "sum": "Summe",
+        "sourceType": {
+          "cash": "Bar",
+          "extern": "externe Überweisung"
+        }
+      },
+      "table": {
+        "title": "Name / Aktion",
+        "crew": "Crew",
+        "amount": "Betrag",
+        "deposited": "Eingezahlt",
+        "date": "Datum",
+        "supporter": "Beteiligte Supporter"
+      }
+    },
+    "hints": {
+      "deadline": {
+        "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte ein!",
+        "date": "bis spätestens {deadline}",
+        "immediately": "umgehend"
+      },
+      "dates": {
+        "received": "Erhalten: {date}",
+        "created": "Eingetragen: {date}"
+      },
+      "total": {
+        "cash": "Summe Barspende: {total}",
+        "extern": "Summe Spende durch externe Überweisung: {total}",
+        "all": "Spendensumme: {total}"
+      },
+      "error": {
+        "amount": {
+          "pattern": "Falsches Format (z.B. 37,50 € oder Fr. 37.50)"
+        }
+      }
+    },
+    "buttons": {
+      "add": "Spende hinzufügen",
+      "save": "Speichern"
+    },
+    "placeholder": {
+      "comment": "Bemerkung / Frage",
+      "received": "Wann hast du die Spende erhalten?",
+      "involved": {
+        "label": "Von wem hast du die Spende erhalten?",
+        "indicator": "Max Mustermann aus deiner Crew..."
+      },
+      "context": {
+        "label": "Wobei ist die Spende entstanden?",
+        "indicator": "z.B. Straßenfest"
+      },
+      "category": "Kategorie",
+      "categories": {
+        "concert": "Konzerte",
+        "festival": "Festivals",
+        "stadium": "Stadien",
+        "run4wash": "Run 4 WASH",
+        "school": "Schule",
+        "party": "Party",
+        "streetFestivals": "Straßenfeste",
+        "karaoke": "Karaoke",
+        "kicker": "Kickerturniere"
+      },
+      "source": {
+        "unknown": "Kann ich nicht zuordnen",
+        "can": "Pfandtonne",
+        "box": "Spendendose",
+        "gl": "Gästeliste",
+        "other": "Sonstiges",
+        "description": "Beschreibung..."
+      },
+      "externalDetails": {
+        "receipt": "Spendenbescheinigung erwünscht?",
+        "partner": {
+          "label": "Wer überweist die Spende?",
+          "name": "Location / Veranstalter",
+          "asp": "Ansprechpartner",
+          "email": "Emailadresse",
+          "address": "Postanschrift"
+        }
+      }
+    }
+  },
+  "currencies": {
+    "default": "EUR",
+    "label": {
+      "EUR": "€",
+      "CHF": "Fr.",
+      "USD": "$"
+    }
+  },
+  "externalTransaction": {
+    "reasonForPayment": "Verwendungszweck",
+    "label": {
+      "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
+    }
+  },
+  "poolEventForm": {
+    "title": "erstelle einen neuen Pool-Event",
+    "editFormTitle" : "edit pool-event",
+    "button" : {
+      "saveAsDraft" : "Entwurf erstellen",
+      "create" : "erstellen" , 
+      "cancel" : "abbrechen"
+    },
+    "input": {
+      "title": {
+        "placeholder": "Bitte Titel eingeben",
+        "label" : "Titel"
+      },
+      "address": {
+        "placeholder": "Bitte Adresse eingeben",
+        "label" : "Adresse"
+      },
+      "website" : {
+        "label" : "Webseite",
+        "placeholder" : "Bitte Webseite eingeben"
+      },
+      "type": {
+        "placeholder": "Bitte Type eingeben",
+        "label" : "Type",
+        "options": {
+          "concert" : "Konzert",
+          "festival" : "Festival",
+          "goldEimer" : "Goldeimer festival",
+          "RUN4WASH" : "RUN4WASH",
+          "others" : "Anders" 
+        },
+        "value": {
+          "concert" : "Konzert",
+          "festival" : "Festival",
+          "goldEimer" : "Goldeimer festival",
+          "RUN4WASH" : "RUN4WASH",
+          "others" : "Anders" 
+        }
+      },
+      "start": {
+        "label" : "Start",
+        "timePicker" : {
+          "placeholder": "Bitte Startszeit eingeben"
+        },
+        "datePicker": {
+          "placeholder" : "Bitte Startsdatum eingeben"
+        }
+      },
+      "end": {
+        "label" : "end",
+        "timePicker" : {
+          "placeholder": "Bitte Endzeit eingeben"
+        },
+        "datePicker": {
+          "placeholder" : "Bitte Enddatum eingeben"
+        }
+      },
+      "applicationStart": {
+        "placeholder": "Bitte Bewernungsstart eingeben",
+        "label" : "Bewernungsstart",
+        "timePicker" : {
+          "placeholder": "Bitte Bewerbungsstart eingeben"
+        },
+        "datePicker": {
+          "placeholder" : "Bitte Bewerbungsstartsdatum eingeben"
+        }
+      },
+      "applicationEnd": {
+        "placeholder": "Bitte Bewerbungsend eingeben",
+        "label" : "Bewerbungsend",
+        "timePicker" : {
+          "placeholder": "Bitte Bewerbungsend eingeben"
+        },
+        "datePicker": {
+          "placeholder" : "Bitte Bewerbungsenddatum eingeben"
+        }
+      },
+      "supporterLimit": {
+        "label" : "Supporterlimit"
+      },
+      "activeUserOnly": {
+        "label" : "Sichtbar für aktive User"
+      },
+      "aspOfEvent": {
+        "label" : "Sichtbar für aktive User",
+        "placeholder": "Bitte Asp des Event eingeben"
+      },
+      "description" : {
+        "label": "Description",
+      "placeholder" : "Bitte Beschreibung eingeben"
+      } 
+     }
+  },
+  "poolEventView" : {
+    "address" : "Adresse:",
+     "addressNote" : "adressbezeichnung:",
+     "website" : "Webseite:",
+     "start" : "Start:",
+     "end" : "End:",
+     "applicationStart" : "Bewerbungsstart:",
+     "applicationEnd" : "Bewerbungssende:",
+     "aspOfEvent" : "Asp des Events:",
+     "supporterLimit" : "Bewerberlimit:",
+     "description" : "Beschreibung:",
+     "button" : {
+        "refuse" : "ablehnen",
+        "release" : "veröffentlichen",
+        "edit": "bearbeiten",
+        "delete": "löschen",
+        "applications" : "Bewerbungen" 
+     },
+     "state" : {
+       "draft" : "Entwurf",
+       "released" : "veröffentlicht",
+       "refused" : "abgelehnt",
+       "unreleased": "unveröffentlicht"
+     }
+  },
+  "applicationHandler": {
+    "applications": "Bewerbungen",
+    "name": "name",
+    "age": "alter",
+    "message": "nachricht",
+    "state": "zustand",
+    "button": {
+      "reject": "ablehnen",
+      "accept": "annehmen",
+      "waitingList": "warteliste"
+    }
+  }
+}

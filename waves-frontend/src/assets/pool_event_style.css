@@ -1,0 +1,68 @@
+.b-container.fluid {
+    margin: 10px;
+  }
+  input {
+    position: relative;
+    font-size: 14px;
+    display: inline-block;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    padding: 0 15px;
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+  #tag {
+    float: left;
+  }
+  
+  #button {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+    float: left;
+  }
+  
+  .buttonSignUp {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    width: 100%;
+    /*padding-top: 0.6em;*/
+  }
+  /*.suggestions {*/
+  /*line-height: 1em;*/
+  /*}*/
+  el-form-item {
+    float: left;
+  }
+  .genderOptions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 0.5em;
+    .el-radio {
+      margin: 0em;
+      padding-left: 0.5em;
+    }
+  }
+  #genContent {
+    float: left;
+    clear: both;
+    width: 100%;
+  }
+  
+  .vca-button-primary {
+    width: 97%;
+  }
+  .vca-button-warn {
+    width: 97%;
+  }

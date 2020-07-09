@@ -1,0 +1,8 @@
+{
+    "data" : {
+        "festival": "https://vca.informatik.hu-berlin.de/pool/wp-content/plugins/vca-asm/img/icon-festival_32.png",
+        "concert": "https://vca.informatik.hu-berlin.de/pool/wp-content/plugins/vca-asm/img/icon-concert_32.png",
+        "others": "https://vca.informatik.hu-berlin.de/pool/wp-content/plugins/vca-asm/img/icon-miscaction_32.png",
+        "networkmeeting": "https://vca.informatik.hu-berlin.de/pool/wp-content/plugins/vca-asm/img/icon-miscaction_32.png"
+    }    
+}

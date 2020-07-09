@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
   
 services:  
   gamifydb:
@@ -114,4 +114,15 @@ services:
     ports:
       - 9000:80
       - 443:443
+      
+  waves-frontend:
+    container_name: waves-frontend
+    build:
+      context: ./waves-frontend
+      target: 'develop-stage'
+    ports:
+    - '8080:8080'
+    volumes:
+    - './waves-frontend:/app'
+    command: /bin/sh -c "npm run dev"
         

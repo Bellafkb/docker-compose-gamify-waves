@@ -1,0 +1,100 @@
+{
+    "rules": {
+        "front.name": [
+          {
+            "required": true,
+            "message": "Please input title",
+            "trigger": "blur"
+          },
+          {
+            "min": 3,
+            "max": 100,
+            "message": "Length should be 3 to 100",
+            "trigger": "blur"
+          }
+        ],
+        "front.website": [
+          {
+            "required": true,
+            "message": "Please input website",
+            "trigger": "blur"
+          },
+          {
+            "min": 3,
+            "max": 100,
+            "message": "Length should be 3 to 100",
+            "trigger": "blur"
+          }
+        ],
+        "location.full_address": [
+          {
+            "required": true,
+            "message": "Please input address",
+            "trigger": "blur"
+          }
+        ],
+        "location.route": [
+          {
+            "required": true,
+            "message": "Please input street name",
+            "trigger": "blur"
+          }
+        ],
+        "location.street_number": [
+          {
+            "required": true,
+            "message": "Please input street number",
+            "trigger": "blur"
+          }
+        ],
+        "location.locality": [
+          {
+            "required": true,
+            "message": "Please input city",
+            "trigger": "blur"
+          }
+        ],
+        "location.postal_code": [
+          {
+            "required": true,
+            "message": "Please input postal code",
+            "trigger": "blur"
+          }
+        ],
+        "front.idevent_type": [
+          {
+            "required": true,
+            "message": "Please select event type",
+            "trigger": "blur"
+          }
+        ],
+        "start": [
+          {
+            "required": true,
+            "message": "Please select event type",
+            "trigger": "change"
+          }
+        ],
+        "end" :[
+          {
+            "required": true,
+            "message": "Please select event type",
+            "trigger": "change"
+          }
+        ] ,
+        "applicationStart": [
+          {
+            "required": true,
+            "message": "Please select event type",
+            "trigger": "change"
+          }
+        ],
+        "applicationEnd" :[
+          {
+            "required": true,
+            "message": "Please select event type",
+            "trigger": "change"
+          }
+        ] 
+}
+}
