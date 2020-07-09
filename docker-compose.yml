@@ -34,6 +34,7 @@ services:
       - 6379
 
   gamify-backend:
+    image: waves-backend
     container_name: gamify-backend
     restart: always
     build:
@@ -70,6 +71,7 @@ services:
       - CACHE_REDIS_PORT=6379
       
   waves-backend:
+    image: waves-backend
     container_name: waves-backend
     restart: always
     build:
@@ -115,14 +117,14 @@ services:
       - 80:80
       - 443:443
 
-  #waves-frontend:
-   # container_name: waves-frontend
-   # build:
-   #   context: ./waves-frontend
-      #target: 'develop-stage'
-   # ports:
-   # - '8080:8080'
-   # volumes:
-   # - './waves-frontend:/app'
-   # command: /bin/sh -c "npm run dev"
+  waves-frontend:
+    image: waves-frontend
+    container_name: waves-frontend
+    build:
+      context: ./waves-frontend
+    ports:
+      - '8080:8080'
+    volumes:
+      - './waves-frontend:/app'
+    command: /bin/sh -c "serve -p 8080 -s dist"
         
