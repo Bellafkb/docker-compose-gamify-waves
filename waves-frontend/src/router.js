@@ -21,59 +21,59 @@ export default new Router({
   // eslint-disable-next-line no-sparse-arrays
   routes: [
     {
-      path: "/",
+      path: baseUrl,
       name: "PoolEventsView",
       component: PoolEventsView
     },
     {
-      path: "/event/:id",
+      path: `${baseUrl}/event/:id`,
       name: "pooleventview",
       component: PoolEventView
     },
     {
-      path: "/create",
+      path: `${baseUrl}/create`,
       name: "create",
       component: PoolEventFormView
     },
     {
-      path: "/event/:id/edit",
+      path: `${baseUrl}/event/:id/edit`,
       name: "EditPoolevent",
       component: PoolEventFormView
     },
     {
-      path: "/applications/:id",
+      path: `${baseUrl}/applications/:id`,
       name: "applications",
       component: ApplicationHandlerView
     },
     {
-      path: "/notifications",
+      path: `${baseUrl}/notifications`,
       name: "NotificationsView",
       component: NotificationsView
     },
 
     {
-      path: "/profile",
+      path: `${baseUrl}/profile`,
       name: "Profile",
       component: ProfileView
     },
     {
-      path: "/wiki/badges",
+      path: `${baseUrl}/wiki/badges`,
       name: "wiki",
       component: AchievementWikiView
     },
     {
-      path: "/info",
+      path: `${baseUrl}/info`,
       name: "information",
       component: InformationView
     },
     {
-      path: "/dashboard",
+      path: `${baseUrl}/dashboard`,
       name: "dashboardView",
       component: DashboardView
     },
     ,
     {
-      path: "/recomandations",
+      path: `${baseUrl}/recomandations`,
       name: "recomandation",
       component: RecomandationView
     },
