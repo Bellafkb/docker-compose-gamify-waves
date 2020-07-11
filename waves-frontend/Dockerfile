@@ -5,7 +5,10 @@ WORKDIR /app
 
 COPY package*.json ./ 
 
+RUN npm config set unsafe-perm true
+
 RUN npm install -g serve
+
 RUN npm install
 
 COPY . .

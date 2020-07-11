@@ -123,8 +123,7 @@ services:
     build:
       context: ./waves-frontend
     ports:
-      - '8080:8080'
+      - 8080:8080
     volumes:
       - './waves-frontend:/app'
-    #command: /bin/sh -c "serve -p 8080 -s dist"
-        
+
