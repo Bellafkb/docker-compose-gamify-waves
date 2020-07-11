@@ -14,64 +14,66 @@ import Vue from "vue";
 
 Vue.use(Router);
 
+const baseUrl = '/waves'
+
 export default new Router({
   mode: "history",
   // eslint-disable-next-line no-sparse-arrays
   routes: [
     {
-      path: "/waves",
+      path: "/",
       name: "PoolEventsView",
       component: PoolEventsView
     },
     {
-      path: "/waves/event/:id",
+      path: "/event/:id",
       name: "pooleventview",
       component: PoolEventView
     },
     {
-      path: "/waves/create",
+      path: "/create",
       name: "create",
       component: PoolEventFormView
     },
     {
-      path: "/waves/event/:id/edit",
+      path: "/event/:id/edit",
       name: "EditPoolevent",
       component: PoolEventFormView
     },
     {
-      path: "/waves/applications/:id",
+      path: "/applications/:id",
       name: "applications",
       component: ApplicationHandlerView
     },
     {
-      path: "/waves/notifications",
+      path: "/notifications",
       name: "NotificationsView",
       component: NotificationsView
     },
 
     {
-      path: "/waves/profile",
+      path: "/profile",
       name: "Profile",
       component: ProfileView
     },
     {
-      path: "/waves/wiki/badges",
+      path: "/wiki/badges",
       name: "wiki",
       component: AchievementWikiView
     },
     {
-      path: "/waves/info",
+      path: "/info",
       name: "information",
       component: InformationView
     },
     {
-      path: "/waves/dashboard",
+      path: "/dashboard",
       name: "dashboardView",
       component: DashboardView
     },
     ,
     {
-      path: "/waves/recomandations",
+      path: "/recomandations",
       name: "recomandation",
       component: RecomandationView
     },
