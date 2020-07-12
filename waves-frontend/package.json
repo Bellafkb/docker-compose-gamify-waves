@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npx --max_old_space_size=4096 vue-cli-service server",
-    "start": "VUE_APP_ENV=PRODUCTION npx --max_old_space_size=4096 vue-cli-service serve",
-    "build": "npx --max_old_space_size=4096 vue-cli-service build",
-    "lint": "npx --max_old_space_size=4096 vue-cli-service lint"
+    "dev": "npx --max_old_space_size=4096 vue-cli-service serve",
+    "start": "VUE_APP_ENV=PRODUCTION npx vue-cli-service serve --max_old_space_size=4096",
+    "build": "npx  vue-cli-service build --max_old_space_size=4096",
+    "lint": "npx vue-cli-service lint --max_old_space_size=4096"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
