@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
-    "start": "VUE_APP_ENV=PRODUCTION vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "npx --max_old_space_size=4096 vue-cli-service server",
+    "start": "VUE_APP_ENV=PRODUCTION npx --max_old_space_size=4096 vue-cli-service serve",
+    "build": "npx --max_old_space_size=4096 vue-cli-service build",
+    "lint": "npx --max_old_space_size=4096 vue-cli-service lint"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
@@ -61,9 +61,13 @@
       "node": false
     },
     "extends": [
-      "plugin:vue/strongly-recommended"
+      "plugin:vue/strongly-recommended",
+      "eslint:recommended"
     ],
-    "rules": {}
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
   },
   "postcss": {
     "plugins": {
