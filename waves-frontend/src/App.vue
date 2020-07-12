@@ -13,7 +13,6 @@
 </template>
 <script>
 import Vue from "vue";
-import io from "socket.io-client";
 import Navbar from "./components/Navbar";
 import CrewLeaderboard from "./components/CrewLeaderboard";
 import vueCookies from "vue-cookies";

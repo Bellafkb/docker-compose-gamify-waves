@@ -5,7 +5,6 @@ import { applicationActions } from "./application";
 import { voteActions } from "./vote";
 import { authActions } from "./auth";
 import { gamificationActions } from "./gamification";
-import { eventTypeActions } from "./eventtype";
 import { supporterActions } from "./supporters";
 import { filterActions } from "./filter";
 import { favoriteActions } from "./favorite";
@@ -22,7 +21,6 @@ export default {
   ...voteActions,
   ...authActions,
   ...gamificationActions,
-  ...eventTypeActions,
   ...supporterActions,
   ...filterActions,
   ...favoriteActions,

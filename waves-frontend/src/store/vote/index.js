@@ -19,7 +19,7 @@ export const voteActions = {
   DELETE_VOTE: ({ commit, getters }, id) => {
     axios
       .delete(WAVES_BACKEND_URI + `/vote/${id}`, getters.getAccessToken)
-      .then(resp => {})
+      .then(() => {})
       .catch(err => {
         commit("pushError", err.message);
       });

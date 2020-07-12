@@ -8,7 +8,7 @@ const access_token = {
 };
 
 export const applicationActions = {
-  APPLY: async ({ commit, getters }, application) => {
+  APPLY: async ({ commit }, application) => {
     try {
       await axios.post(
         WAVES_BACKEND_URI + `/application`,
@@ -33,7 +33,7 @@ export const applicationActions = {
         commit("pushError", err.message);
       });
   },
-  REJECT_APPLICATION: ({ commit, getters }, id) => {
+  REJECT_APPLICATION: ({ commit }, id) => {
     axios
       .put(
         WAVES_BACKEND_URI + "/application/" + id,

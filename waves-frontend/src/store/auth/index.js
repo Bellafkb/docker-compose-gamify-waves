@@ -20,7 +20,7 @@ export const authActions = {
   SET_CREW_ROLE_CITY: ({ commit }, crew) => {
     commit("setCrewRoleCity", crew);
   },
-  LOGOUT: ({ commit }) => {
+  LOGOUT: () => {
     window.$cookies.remove("full_name");
     window.$cookies.remove("roles");
     window.$cookies.remove("full_name");
@@ -103,7 +103,6 @@ export const authMutation = {
         }
       }
     } else {
-      console.log(APP_STATE.LOGGEDOUT);
       state.appState = APP_STATE.LOGGEDOUT;
     }
   }

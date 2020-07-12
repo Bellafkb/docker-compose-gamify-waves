@@ -24,7 +24,7 @@ export const gamificationActions = {
   },
   FETCH_ACHIEVEMENTS: async ({ commit }) => {
     try {
-      const { data } = await axios.get(GAMIFY_BACKEND_URI + `/achievement`);
+      await axios.get(GAMIFY_BACKEND_URI + `/achievement`);
       commit("setAchievements");
     } catch (error) {
       commit("pushError", error.message);
@@ -41,7 +41,7 @@ export const gamificationActions = {
   FETCH_MY_ACHIEVEMENT_PROGRESS: async ({ commit }) => {
     try {
       const { data } = await axios.get(
-        VUE_APP_GAMIFY_BACKEND_DEV + `/progress/${localStorage.getItem("userId")}`
+        GAMIFY_BACKEND_URI + `/progress/${localStorage.getItem("userId")}`
       );
       commit("setMyAchievementProgress", data.achievements);
     } catch (error) {

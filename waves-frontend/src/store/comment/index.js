@@ -10,9 +10,8 @@ const access_token = {
 };
 
 export const commentActions = {
-  SUBMIT_COMMENT: async ({ commit, getters }, comment) => {
+  SUBMIT_COMMENT: async ({ commit }, comment) => {
     try {
-      console.log("----->", getters.getAccessToken);
       const { data } = await axios.post(
         WAVES_BACKEND_URI + `/comment`,
         comment.data,
