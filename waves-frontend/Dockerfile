@@ -8,7 +8,7 @@ RUN npm --max_old_space_size=4096 install
 
 COPY ./ .
 
-RUN NODE_OPTIONS=--max_old_space_size=4096 npm run build
+RUN npm --max_old_space_size=4096 run build
 
 FROM nginx:latest as production-stage
 
