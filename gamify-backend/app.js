@@ -22,6 +22,7 @@ dotenv.config({ path: "./config/.env" });
 
 const app = express();
 var server = require("http").Server(app);
+require("./socket")(server)
 
 app.use(morgan);
 

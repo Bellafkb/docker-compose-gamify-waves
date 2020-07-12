@@ -24,6 +24,7 @@ import "froala-editor/js/third_party/spell_checker.min";
 import "froala-editor/js/third_party/image_tui.min";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import VueFroala from "vue-froala-wysiwyg";
+import io from "socket.io-client"
 Vue.use(VueFroala);
 Vue.config.productionTip = false;
 
@@ -38,7 +39,7 @@ export default {
   data() {
     return {
       isDev: process.env.ENV === "dev",
-      socket: undefined
+      socket: io(process.env.VUE_APP_GAMIFY_BACKEND_DEV)
     };
   },
   computed: {
