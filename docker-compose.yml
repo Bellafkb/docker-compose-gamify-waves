@@ -129,3 +129,5 @@ services:
     ports:
       - 5002:5002
     restart: on-failure
+    enviroment:
+      - NODE_OPTIONS=--max-old-space-size=8192
