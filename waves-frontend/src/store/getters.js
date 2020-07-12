@@ -2,7 +2,6 @@ import { gamificationGetters } from "./gamification";
 import { pooleventGetters } from "./poolevent";
 import { authGetters } from "./auth";
 import { applicationGetters } from "./application";
-import { eventTypeGetters } from "./eventtype";
 import { supporterGetters } from "./supporters";
 import { filterGetters } from "./filter";
 import { favoriteGetters } from "./favorite";
@@ -12,7 +11,6 @@ export default {
   ...gamificationGetters,
   ...authGetters,
   ...applicationGetters,
-  ...eventTypeGetters,
   ...supporterGetters,
   ...filterGetters,
   ...favoriteGetters,

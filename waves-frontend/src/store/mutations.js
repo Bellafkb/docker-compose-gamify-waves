@@ -1,6 +1,5 @@
 import { gamificationMutations } from "./gamification";
 import { authMutation } from "./auth";
-import { eventTypeMutations } from "./eventtype";
 import { supporterMutations } from "./supporters";
 import { filterMutations } from "./filter";
 import { favoriteMutations } from "./favorite";
@@ -80,7 +79,6 @@ export default {
   },
   ...gamificationMutations,
   ...authMutation,
-  ...eventTypeMutations,
   ...supporterMutations,
   ...filterMutations,
   ...favoriteMutations
