@@ -1,6 +1,6 @@
-version: "3.3"
-  
-services:  
+version: '3'
+
+services:
   gamifydb:
     container_name: gamifydb
     image: mariadb
@@ -107,23 +107,25 @@ services:
       - CACHE_REDIS_HOST=redis
       - CACHE_REDIS_PORT=6379
 
-  nginx: 
-    image: nginx:latest
-    container_name: nginx
-    restart: always
+  # Proxies requests to internal services
+  reverse-proxy:
+    image: nginx:1.17.10
+    container_name: reverse_proxy
+    depends_on:
+        - waves-frontend
+        - waves-backend
+        - gamify-backend
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./reverse_proxy/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 80:80
-      - 443:443
 
+      # Generates a precipitation estimate
   waves-frontend:
     image: waves-frontend
     container_name: waves-frontend
     build:
       context: ./waves-frontend
     ports:
-      - 8080:8080
-    volumes:
-      - './waves-frontend:/app'
-
+      - 5002:5002
+    restart: on-failure

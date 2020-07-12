@@ -1,18 +1,11 @@
-# develop stage
-FROM node:11.1-alpine
-
+FROM node:latest as build-stage
 WORKDIR /app
-
-COPY package*.json ./ 
-
-RUN npm config set unsafe-perm true
-
-RUN npm install -g serve
-
+COPY package*.json ./
 RUN npm install
-
-COPY . .
-
+COPY ./ .
 RUN npm run build
 
-CMD [ "serve", "-p", "8080", "-s", "dist" ]
+FROM nginx:latest as production-stage
+RUN mkdir /app
+COPY --from=build-stage /app/dist /app
+COPY nginx.conf /etc/nginx/nginx.conf
