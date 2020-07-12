@@ -4,11 +4,13 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm --max_old_space_size=4096 install
+RUN npm install
+
+RUN npm i npx -g
 
 COPY ./ .
 
-RUN npm --max_old_space_size=4096 run build
+RUN npm run build
 
 FROM nginx:latest as production-stage
 
