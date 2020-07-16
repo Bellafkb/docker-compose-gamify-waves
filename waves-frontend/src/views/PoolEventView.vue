@@ -187,26 +187,7 @@
         <div style="margin:13px">
           <p>{{ poolEvent.location.desc }}</p>
         </div>
-
-        <GmapMap
-          :center="{
-            lat: parseFloat(poolEvent.location.latitude),
-            lng: parseFloat(poolEvent.location.longitude)
-          }"
-          :zoom="14"
-          map-type-id="terrain"
-          style=" width : 100%; height: 200px; "
-        >
-          <GmapMarker
-            :position="{
-              lat: parseFloat(poolEvent.location.latitude),
-              lng: parseFloat(poolEvent.location.longitude)
-            }"
-            :key="index++"
-            :clickable="true"
-            :draggable="true"
-          />
-        </GmapMap>
+      
       </el-card>
     </el-row>
     <el-row>
@@ -329,3 +310,25 @@ export default {
   }
 }
 </style>
+
+/**
+  <GmapMap
+          :center="{
+            lat: parseFloat(poolEvent.location.latitude),
+            lng: parseFloat(poolEvent.location.longitude)
+          }"
+          :zoom="14"
+          map-type-id="terrain"
+          style=" width : 100%; height: 200px; "
+        >
+          <GmapMarker
+            :position="{
+              lat: parseFloat(poolEvent.location.latitude),
+              lng: parseFloat(poolEvent.location.longitude)
+            }"
+            :key="index++"
+            :clickable="true"
+            :draggable="true"
+          />
+        </GmapMap>
+ */
