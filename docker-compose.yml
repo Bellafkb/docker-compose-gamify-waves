@@ -88,7 +88,7 @@ services:
     environment: 
       - NODE_ENV=dev
 
-      - OAUTH_BASE_URI=http://164.90.191.26
+      - OAUTH_BASE_URI=https://stage.vivaconagua.org
 
       - CLIENT_ID=waveseval
       - CLIENT_SECRET=waveseval
