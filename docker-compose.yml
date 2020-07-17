@@ -88,15 +88,15 @@ services:
     environment: 
       - NODE_ENV=dev
 
-      - OAUTH_BASE_URI=https://stage.vivaconagua.org
+      - OAUTH_BASE_URI=http://164.90.191.26
 
-      - CLIENT_ID=wavesvtwo
-      - CLIENT_SECRET=clientwavesvtwo
-      - REDIRECT_URI=http://localhost:9000/backend/waves/api/v1/oauth
+      - CLIENT_ID=waveseval
+      - CLIENT_SECRET=waveseval
+      - REDIRECT_URI=http://164.90.191.26/backend/waves/api/v1/oauth
       
-      - REDIRECT_URI_PRODUCTION=https://stage.vivaconagua.org/backend/waves/api/v1/oauth
-      - CLIENT_ID_PRODUCTION=wavesvtwo
-      - CLIENT_SECRET_PRODUCTION=clientwavesvtwo
+      - REDIRECT_URI_PRODUCTION=http://164.90.191.26/backend/waves/api/v1/oauth
+      - CLIENT_ID_PRODUCTION=waveseval
+      - CLIENT_SECRET_PRODUCTION=waveseval
 
       - PORT=5000
       - HOST=localhost
