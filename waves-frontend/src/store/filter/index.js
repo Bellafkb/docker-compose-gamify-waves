@@ -20,32 +20,17 @@ export const filterActions = {
     } catch (error) {
       commit("pushError");
     }
-  },
-  FETCH_EVENTTYPES: async ({ commit }) => {
-    try {
-      const { data } = await axios.get(WAVES_BACKEND_URI+ "/eventtype");
-      console.log("types:", data);
-      commit("setTypes", data);
-    } catch (error) {
-      commit("pushError");
-    }
   }
 };
 
 export const filterMutations = {
   setRegions: (state, regions) => {
     state.regions = regions;
-  },
-  setTypes: (state, types)=>{
-      state.eventtypes= types
   }
 };
 
 export const filterGetters = {
   regions: state => {
     return state.regions;
-  },
-  types: state => {
-    return state.eventtypes
   }
 };

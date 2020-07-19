@@ -46,7 +46,7 @@ export default {
     try {
       const { data } = await axios.get(WAVES_BACKEND_URI + `/eventtype`);
       console.log("FETCH_EVENTTYPES", data)
-      commit("setEventTypes", data.data);
+      commit("setEventTypes", data);
     } catch (error) {
       commit("pushError", error.message);
     }

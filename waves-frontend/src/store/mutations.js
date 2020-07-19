@@ -77,6 +77,10 @@ export default {
   resetError: state => {
     state.errors = [];
   },
+  setEventTypes: (state, types) =>{
+    console.log("setEventTypes", types);
+    state.eventtypes = types.data
+  },
   ...gamificationMutations,
   ...authMutation,
   ...supporterMutations,

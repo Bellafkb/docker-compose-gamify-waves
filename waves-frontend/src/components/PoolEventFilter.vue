@@ -101,7 +101,7 @@ export default {
       store: this.$store,
       poolevents: this.$store.getters.getAllPoolEvents.data,
       show: false,
-      types: []
+      types:[]
     };
   },
   props: ["getUser"],
@@ -130,7 +130,7 @@ export default {
     ...mapGetters([
       "getAllMonths",
       "regions",
-      "types",
+      "eventtypes",
       "appState",
       "APP_STATE"
     ]),
