@@ -52,5 +52,9 @@ export default {
   },
   APP_STATE: state => {
     return state.APP_STATE;
+  },
+  eventtypes: state =>{
+    console.log("gettertypes", state.eventtypes);
+    return state.eventtypes
   }
 };
