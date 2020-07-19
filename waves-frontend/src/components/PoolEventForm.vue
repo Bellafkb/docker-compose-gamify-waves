@@ -295,14 +295,14 @@ export default {
           idevent_type: ""
         },
         location: {
-          locality: "",
-          country: "",
-          latitude: "",
-          longitude: "",
-          postal_code: "",
-          route: "",
-          street_number: "",
-          full_address: ""
+          locality: "berlin",
+          country: "Germany",
+          latitude: "52.492251", 
+          longitude: "13.397620",
+          postal_code: "13199",
+          route: "hiddenseestraße",
+          street_number: "2",
+          full_address: "hiddenseestraße 2"
         },
         description: {
           text: "",
