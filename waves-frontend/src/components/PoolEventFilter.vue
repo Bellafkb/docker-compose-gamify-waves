@@ -130,7 +130,7 @@ export default {
     ...mapGetters([
       "getAllMonths",
       "regions",
-      "eventtypes",
+      "types",
       "appState",
       "APP_STATE"
     ]),
