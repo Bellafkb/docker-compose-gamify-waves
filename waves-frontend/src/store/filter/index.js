@@ -24,8 +24,8 @@ export const filterActions = {
   FETCH_TYPES: async ({ commit }) => {
     try {
       const { data } = await axios.get(WAVES_BACKEND_URI+ "/eventtype");
-      console.log("types:",data);
-      commit("setTypes", data.data);
+      console.log("types:", data);
+      commit("setTypes", data);
     } catch (error) {
       commit("pushError");
     }
