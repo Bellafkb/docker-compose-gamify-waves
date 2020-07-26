@@ -18,6 +18,7 @@ export const gamificationActions = {
   POST_ACHIEVEMENT: async ({ commit }, achievement) => {
     try {
       await axios.post(GAMIFY_BACKEND_URI + `/achievement`, achievement);
+      window.location = "/waves/profile"
     } catch (error) {
       commit("pushError", error.message);
     }

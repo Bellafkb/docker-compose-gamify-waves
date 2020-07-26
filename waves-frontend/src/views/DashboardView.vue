@@ -91,6 +91,11 @@ export default {
     ]),
     submit() {
       this.POST_EVENTTYPE(this.pe_type);
+      this.$notify({
+          title: 'Success',
+          message: 'You created a new Achievement',
+          type: 'success'
+        });
     },
     async fetchAllTypes() {
       try {

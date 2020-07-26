@@ -362,6 +362,11 @@ export default {
             this.poolevent.front.application_end
           );
           this.POST_POOLEVENT(this.poolevent);
+          this.$notify({
+          title: 'Success',
+          message: 'You created a new Event!',
+          type: 'success'
+        });
         }
       } else if (this.$route.params.id != undefined) {
         this.PUT_POOLEVENT({

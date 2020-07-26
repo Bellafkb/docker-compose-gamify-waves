@@ -50,6 +50,7 @@ export const pooleventActions = {
         poolevent,
         access_token
       );
+      window.location = "/waves"
     } catch (error) {
       commit("pushError", error.response);
     }

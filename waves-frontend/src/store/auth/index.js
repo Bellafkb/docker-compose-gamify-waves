@@ -43,8 +43,8 @@ export const authActions = {
 };
 
 export const authMutation = {
-  setUser: (state, waves_jwt) => {
-    const { userId, firstName, lastName, fullName, crew, roles } = jwt.decode(
+  setUser:async (state, waves_jwt) => {
+    const { userId, firstName, lastName, fullName, crew, roles } = await jwt.decode(
       waves_jwt,
       "secret"
     );
@@ -58,6 +58,8 @@ export const authMutation = {
     localStorage.setItem("crewRoleName", crewRoleName);
     localStorage.setItem("firstRole", firstRole.role);
     localStorage.setItem("secondRole", secondRole.role);
+    window.$cookies.remove("waves_access_token")
+    window.location="/"
   },
   setAccessToken: (state, accessToken) => {
     state.access_token = {

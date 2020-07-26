@@ -59,16 +59,19 @@ export default {
   methods: {
     ...mapActions(["SUBMIT_COMMENT"]),
     async submit() {
-      console.log("-->",this.comment);
       if (!this.comment.text) {
         alert("comment section empty");
       } else {
         try {
-          
           await this.SUBMIT_COMMENT({
             data: this.comment
           });
           this.comment.text = "";
+          this.$notify({
+          title: 'Success',
+          message: 'You submited a comment',
+          type: 'success'
+        });
         } catch (error) {
           throw error;
         }

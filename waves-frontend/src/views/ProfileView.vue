@@ -21,6 +21,9 @@
     </el-row>
     <el-row>
       <el-tabs v-model="activeName" style="margin:auto;">
+        <el-tab-pane label="Achievements" name="achievements">
+          <BadgeView />
+        </el-tab-pane>
         <el-tab-pane label="Poolevents" name="poolevents">
           <MyPoolevents />
         </el-tab-pane>
@@ -30,9 +33,6 @@
 
         <el-tab-pane label="Applications" name="applications">
           <MyApplications />
-        </el-tab-pane>
-        <el-tab-pane label="Achievements" name="achievements">
-          <BadgeView />
         </el-tab-pane>
       </el-tabs>
     </el-row>

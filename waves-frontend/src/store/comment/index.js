@@ -18,6 +18,7 @@ export const commentActions = {
         access_token
       );
       commit("addComment", data.data);
+      window.location = window.location.href
     } catch (error) {
       commit("pushError", error.message);
     }
