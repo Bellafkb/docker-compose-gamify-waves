@@ -11,7 +11,7 @@
             style="border-radius: 50%;width:40px"
             class="profile-img"
             :src="
-              `https://eu.ui-avatars.com/api/?rounded=true&name=${comment.full_name}`
+              `https://eu.ui-avatars.com/api/?rounded=true&name=${comment.full_name || 'John Doe'}`
             "
           />
         </el-col>

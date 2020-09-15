@@ -3,6 +3,8 @@ const crewRanking = require("./crewRankingRouter");
 const achievementRouter = require("./achievementRouter");
 const actionsRouter = require("./actionRouter");
 const progressRouter = require("./progressRouter");
+const trophiesRouter = require("./trophiesRouter"); 
+
 
 
 
@@ -28,5 +30,6 @@ module.exports = {
   crewRanking,
   achievementRouter,
   actionsRouter,
-  progressRouter
+  progressRouter,
+  trophiesRouter
 };
