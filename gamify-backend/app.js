@@ -13,7 +13,8 @@ const {
   route,
   crewRanking,
   actionsRouter,
-  progressRouter
+  progressRouter,
+  trophiesRouter
 } = require("./router");
 
 require("colors");
@@ -37,6 +38,10 @@ app.use(base + "/achievement", achievementRouter);
 app.use(base + "/leaderboard", crewRanking);
 app.use(base + "/action", actionsRouter);
 app.use(base + "/progress", progressRouter);
+app.use(base + "/progress", progressRouter);
+app.use(base + "/trophy", trophiesRouter);
+
+
 
 app.use((req, res, callback) => {
   const error = new Error("not found");

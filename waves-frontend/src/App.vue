@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       isDev: process.env.ENV === "dev",
-      socket: io(process.env.VUE_APP_GAMIFY_BACKEND_DEV)
+      //socket: io(process.env.VUE_APP_GAMIFY_BACKEND_DEV)
     };
   },
   computed: {

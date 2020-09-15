@@ -15,7 +15,7 @@
           <strong style="font-size:20px">{{ getUser.fullName }}</strong>
         </el-row>
         <el-row>
-          <span style="color:gray">Supporter since 200 days</span>
+          <span style="color:gray">Supporter since 156 days</span>
         </el-row>
       </el-col>
     </el-row>
@@ -24,13 +24,15 @@
         <el-tab-pane label="Achievements" name="achievements">
           <BadgeView />
         </el-tab-pane>
+        <el-tab-pane label="Trophies" name="Trophies">
+          <TrophiesView/>
+        </el-tab-pane>
         <el-tab-pane label="Poolevents" name="poolevents">
           <MyPoolevents />
         </el-tab-pane>
         <el-tab-pane label="Favorites" name="favorites">
           <MyFavoritePoolevents />
         </el-tab-pane>
-
         <el-tab-pane label="Applications" name="applications">
           <MyApplications />
         </el-tab-pane>
@@ -41,6 +43,7 @@
 
 <script>
 import BadgeView from "../components/BadgeView";
+import TrophiesView from "../components/TrophiesView";
 import MyFavoritePoolevents from "../components/MyFavoritePoolevents";
 import MyApplications from "../components/MyApplications";
 import MyPoolevents from "../components/MyPoolEvents";

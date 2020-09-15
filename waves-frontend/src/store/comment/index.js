@@ -14,7 +14,7 @@ export const commentActions = {
     try {
       const { data } = await axios.post(
         WAVES_BACKEND_URI + `/comment`,
-        comment.data,
+        comment.dat,
         access_token
       );
       commit("addComment", data.data);

@@ -8,13 +8,32 @@
       :key="i"
       style="padding:10px;justify: center;text-align:center;margin-bottom:15px"
     >
-      <el-col style="font-size: 18px;" :span="4" :offset="1">
-        <i style="font-size: 18px;" class="el-icon-top"></i>
+      <el-col
+        :v-if="entry.name === 'Hamburg'"
+        style="font-size: 18px;color: #0a6b91;"
+        :span="4"
+        :offset="1"
+      >
+        <i
+          :v-if="entry.name === 'Hamburg'"
+          style="font-size: 18px;color: #0a6b91;"
+          class="el-icon-top"
+        ></i>
         {{1+i}}
       </el-col>
-      <el-col style="font-size: 18px;" :span="12" :offset="1">{{entry.name}}</el-col>
+
+      <el-col
+        :v-if="entry.name === 'Hamburg'"
+        style="font-size: 18px;color: #0a6b91;"
+        :span="12"
+        :offset="1"
+      >{{entry.name}}</el-col>
       <el-col :span="6">
-        <el-col style="font-size: 18px;" :span="12">{{ entry.score}}</el-col>
+        <el-col
+          :v-if="entry.name === 'Hamburg'"
+          style="font-size: 18px;color: #0a6b91;"
+          :span="12"
+        >{{ entry.score}}</el-col>
         <el-col :span="12">
           <el-icon style="font-size: 18px;" class="el-icon-orange"></el-icon>
         </el-col>
