@@ -1,8 +1,6 @@
-## docker-compose-gamify-waves
+# docker-compose-gamify-waves
 
-# run Project:
-
-
+### run project:
 ```
 docker-compose up -d --b
 ```
